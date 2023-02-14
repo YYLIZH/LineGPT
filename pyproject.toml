@@ -1,0 +1,12 @@
+[tool.autoflake]
+remove-all-unused-imports = true
+recursive = true
+in-place = true
+quiet = true
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
