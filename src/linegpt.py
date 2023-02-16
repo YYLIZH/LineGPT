@@ -1,63 +1,29 @@
-import os
 import openai
 import re
+import os
 import datetime
+from messages import static_messages
 
-openai.api_key = "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"
-
-# https://github.com/JokerWuXin/ChatGpt-LineBot
-
-HELP_TEXT = """This is the usage of LineGPT. Tag the LineGPT to awake it and use its command.
-@LineGPT <Command>
-
-* Show help text
-@LineGPT help
-
-* Start a dialogue session
-@LineGPT start
-
-* Show dialogue
-@LineGPT log
-
-* Ask a question
-@LineGPT ask <your question> 
-Example:
-@LineGPT ask What is graphene?
-
-* Close an existing dialogue session
-@LineGPT close
-
-* Restart a dialogue session
-@LineGPT restart
-"""
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 class DialogueSession:
-    limited_sentences = 20
-
     def __init__(self) -> None:
         self.dialogue = []
         self.last_update_time = datetime.datetime.now()
 
     def add_ai_text(self, text: str) -> None:
-        if not text.startswith("AI: "):
-            text = "AI: " + text
-        self.dialogue.append(f"{text}")
-
+        self.dialogue.append(f"AI: {text}")
         self.last_update_time = datetime.datetime.now()
 
     def add_human_text(self, text: str) -> None:
         self.dialogue.append(f"Human: {text}")
-
         self.last_update_time = datetime.datetime.now()
 
-    def create_prompt(self) -> str:
+    def dump_dialogue(self) -> str:
         return "\n".join(self.dialogue)
 
-    def is_full(self) -> bool:
-        return len(self.dialogue) >= self.limited_sentences - 1
-
-    def is_due(self) -> bool:
+    def is_expired(self) -> bool:
         time_delta: datetime.timedelta = datetime.datetime.now() - self.last_update_time
         if time_delta.seconds >= 10 * 60:
             return True
@@ -67,28 +33,36 @@ class DialogueSession:
 class LineGPT:
     def __init__(self) -> None:
         self.dialogue_session = None
+        self.model = os.getenv("OPENAI_MODEL", default="text-davinci-003")
+        self.temperature = float(os.getenv("OPENAI_TEMPERATURE", default=1))
+        self.max_tokens = int(os.getenv("OPENAI_MAX_TOKEN", default=16))
+        self.frequency_penalty = float(
+            os.getenv("OPENAI_FREQUENCY_PENALTY", default=0.0)
+        )
+        self.presence_penalty = float(os.getenv("OPENAI_PRESENCE_PENALTY", default=0.0))
 
-    def get_response(self):
+    def ask_gpt(self):
         response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=self.dialogue_session.create_prompt(),
-            temperature=0.9,
-            max_tokens=150,
-            top_p=1,
-            frequency_penalty=0.0,
-            presence_penalty=0.6,
+            model=self.model,
+            prompt=self.dialogue_session.dump_dialogue(),
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+            frequency_penalty=self.frequency_penalty,
+            presence_penalty=self.presence_penalty,
         )
         text = response["choices"][0]["text"].strip()
-        self.dialogue_session.add_ai_text(text)
+        extracted_text = re.search(r"\?\n\n(\w+: +)?([\s\S]*)", text).group(2)
+        self.dialogue_session.add_ai_text(extracted_text)
         return text
 
     def select_command(self, command_str: str):
-        ERROR_OUTPUT = "Error: Unknown command. Please type again or type '@LineGPT help' for more information."
+        if re.match("^@LineGPT *$", command_str):
+            return self.command_help()
         pattern = re.compile(r"^@LineGPT *(\w+) *(.*)")
-
         mrx = pattern.search(command_str)
+
         if not mrx:
-            return ERROR_OUTPUT
+            return static_messages["SELECT_COMMAND_ERROR"]
         command = mrx.group(1)
         if command == "help":
             return self.command_help()
@@ -102,38 +76,42 @@ class LineGPT:
             return self.command_restart()
         if command == "log":
             return self.command_log()
-        return ERROR_OUTPUT
+        return static_messages["SELECT_COMMAND_ERROR"]
 
     def command_help(self):
-        return HELP_TEXT
+        return static_messages["HELP_TEXT"]
 
     def command_start(self):
         if self.dialogue_session is None:
             self.dialogue_session = DialogueSession()
-            return "Start the dialogue session. You can ask question now."
-        return "Found existing session. You can see existing dialogue, keep asking question, or restart a new session."
+            return static_messages["START_GREETING"]
+        return static_messages["START_FOUND_SESSION"]
 
     def command_ask(self, text):
         if self.dialogue_session is None:
-            return "Warning: Session does not exist. Please start the session first."
-        if self.dialogue_session.is_full():
-            return "Warning: Reach the sentence limit of dialogue. Please restart the dialogue session."
+            return static_messages["ASK_NO_SESSION_WARNING"]
+        if self.dialogue_session.is_expired():
+            return static_messages["ASK_EXPIRED_WARNING"]
 
         self.dialogue_session.add_human_text(text)
         try:
-            response = self.get_response()
+            response = self.ask_gpt()
         except Exception:
             self.dialogue_session.dialogue.pop()
-            return "Error: RuntimeError. Please ask again later."
+            return static_messages["ASK_QUESTION_RUNTIME_ERROR"]
         return response
 
     def command_close(self):
         self.dialogue_session = None
-        return "Close current dialogue session."
+        return static_messages["CLOSE_MESSAGE"]
 
     def command_restart(self):
         self.dialogue_session = DialogueSession()
-        return "Restart the dialogue session"
+        return static_messages["RESTART_MESSAGE"]
 
     def command_log(self):
-        return self.dialogue_session.create_prompt()
+        return (
+            static_messages["LOG_MESSAGE"]
+            + "\n"
+            + self.dialogue_session.dump_dialogue()
+        )
