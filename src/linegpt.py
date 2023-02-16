@@ -1,7 +1,9 @@
-import openai
-import re
-import os
 import datetime
+import os
+import re
+
+import openai
+
 from .messages import static_messages
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
