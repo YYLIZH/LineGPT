@@ -1,0 +1,27 @@
+name: Linters
+on: pull_request
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.9"
+      - name: Install Dependencies
+        run: |
+          python -m pip install isort black autoflake
+      - name: Run formatters
+        run: |
+          autoflake src
+          isort src
+          black src
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: echo
+          author_email: ryne91009@gmail.com
+          message: "Commit changes from formatter"
+  
