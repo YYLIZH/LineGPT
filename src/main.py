@@ -21,7 +21,7 @@ if (
     raise ValueError("Please set the .env value correctly.")
 
 app = FastAPI()
-lineGPT = LineGPT(language=os.getenv("LANGUAGE", default="en"))
+lineGPT = LineGPT()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 

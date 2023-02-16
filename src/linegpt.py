@@ -2,7 +2,7 @@ import openai
 import re
 import os
 import datetime
-from messages import static_messages
+from .messages import static_messages
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -51,9 +51,9 @@ class LineGPT:
             presence_penalty=self.presence_penalty,
         )
         text = response["choices"][0]["text"].strip()
-        extracted_text = re.search(r"\?\n\n(\w+: +)?([\s\S]*)", text).group(2)
+        extracted_text = re.search(r"(\w+: +)?([\s\S]*)", text).group(2)
         self.dialogue_session.add_ai_text(extracted_text)
-        return text
+        return extracted_text
 
     def select_command(self, command_str: str):
         if re.match("^@LineGPT *$", command_str):

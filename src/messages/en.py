@@ -24,7 +24,7 @@ Example:
 
 SELECT_COMMAND_ERROR = "Error: Unknown command. Please type again or type '@LineGPT help' for more information."
 
-START_GREETING = "Start the dialogue session. You can ask question now. You can ask at most 10 questions in each session."
+START_GREETING = "Start the dialogue session. You can ask question now."
 START_FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep asking question, or restart a new session."
 
 ASK_NO_SESSION_WARNING = (
