@@ -25,8 +25,11 @@ lineGPT = LineGPT()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
+@app.get("/")
+async def home(request:Request):
+    return {"LineGPT":"Test"}
 
-@app.post("/")
+@app.post("/webhook")
 async def LineGPTBot(request: Request):
     signature = request.headers["X-Line-Signature"]
     body = await request.body()
