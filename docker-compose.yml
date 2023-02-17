@@ -1,9 +1,16 @@
 version: "3"
 services:
+  nginx:
+      container_name: nginx
+      image: nginx
+      ports:
+        - "80:80"
+      volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf
+      restart: always
   web:
     build: .
     ports:
       - "8000:8000"
     command: >
-      bash -c "nginx
-      && gunicorn src.main:app -c gunicorn.py"
+      bash -c "gunicorn -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --log-level debug src.main:app"
