@@ -7,7 +7,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"))
+load_dotenv()
 
 from .linegpt import LineGPT
 
