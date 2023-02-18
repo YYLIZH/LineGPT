@@ -5,9 +5,10 @@ All modules should import env setting from this module.
 
 """
 import os
-from dotenv import load_dotenv
-from typing import Tuple
 from functools import cache
+from typing import Tuple
+
+from dotenv import load_dotenv
 
 load_dotenv()
 environ = os.environ
