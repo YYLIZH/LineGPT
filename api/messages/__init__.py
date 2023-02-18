@@ -1,10 +1,11 @@
 import importlib
 import os
 
+# from api.messages import zh as module
 language = os.getenv("LANGUAGE", default="zh")
 
 
-module = importlib.import_module(f".{language}", __name__)
+module = importlib.import_module(f"api.messages.{language}")
 
 static_messages = {
     "HELP_TEXT": module.HELP_TEXT,
