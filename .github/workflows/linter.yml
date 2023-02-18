@@ -15,9 +15,9 @@ jobs:
           python -m pip install isort black autoflake
       - name: Run formatters
         run: |
-          autoflake src
-          isort src
-          black src
+          autoflake api
+          isort api
+          black api
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
