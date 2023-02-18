@@ -31,6 +31,11 @@ async def home(request: Request):
     return {"LineGPT": "Test"}
 
 
+@app.get("/webhook")
+async def checkWebhook(request: Request):
+    return {"webhook": "OK"}
+
+
 @app.post("/webhook")
 async def LineGPTBot(request: Request):
     signature = request.headers["X-Line-Signature"]
