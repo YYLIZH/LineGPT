@@ -1,15 +1,15 @@
 import os
-
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(__file__)
+
 load_dotenv()
 
-from .linegpt import LineGPT
+from api.linegpt import LineGPT
 
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
@@ -23,7 +23,7 @@ if (
 app = FastAPI()
 lineGPT = LineGPT()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(LINE_CHANNEL_SECRET)
+line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
 @app.get("/")
@@ -41,13 +41,13 @@ async def LineGPTBot(request: Request):
     signature = request.headers["X-Line-Signature"]
     body = await request.body()
     try:
-        handler.handle(body.decode(), signature)
+        line_handler.handle(body.decode(), signature)
     except InvalidSignatureError:
         raise HTTPException(status_code=400, detail="Missing Parameters")
     return "OK"
 
 
-@handler.add(MessageEvent, message=TextMessage)
+@line_handler.add(MessageEvent, message=TextMessage)
 def handling_message(event):
     replyToken = event.reply_token
     if event.message:
