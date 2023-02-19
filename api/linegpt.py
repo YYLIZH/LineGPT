@@ -54,6 +54,7 @@ class LineGPT:
         )
         text = response["choices"][0]["text"].strip()
         extracted_text = re.search(r"(\w+: +)?([\s\S]*)", text).group(2)
+        extracted_text = extracted_text.replace("AI: ", "")
         self.dialogue_session.add_ai_text(extracted_text)
         return extracted_text
 

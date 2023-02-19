@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(__file__)
 load_dotenv()
 
 from api.linegpt import LineGPT
+from api.commands.weather import WeatherCommand
 
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")

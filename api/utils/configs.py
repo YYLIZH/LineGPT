@@ -66,7 +66,7 @@ def parse_openai() -> Tuple[str, str, float, int, float, float]:
     if not -2.0 <= frequency_penalty <= 2.0:
         frequency_penalty = 0.0
 
-    return model, api_key, max_token, presence_penalty, frequency_penalty
+    return model, api_key, temperature, max_token, presence_penalty, frequency_penalty
 
 
 @cache
