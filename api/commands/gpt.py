@@ -1,10 +1,12 @@
 import datetime
 import re
+import typing
 from enum import Enum
 from typing import Dict
 
 import openai
 
+from api.commands.base import Command
 from api.utils.configs import (
     LANGUAGE,
     OPENAI_API_KEY,
@@ -30,6 +32,7 @@ class MessageEN(Enum):
     CLOSE = "Close current dialogue session."
     RESTART = "Restart the dialogue session"
     LOG = "Below are the past dialogues:"
+    NOT_ALLOW_METHOD = "This method is not allowed."
 
 
 class MessageZH(Enum):
@@ -42,7 +45,56 @@ class MessageZH(Enum):
     CLOSE = "關閉對話階段。"
     RESTART = "重新啟動對話階段"
     LOG = "以下是對話紀錄："
+    NOT_ALLOW_METHOD = "不存在的指令"
 
+
+USAGE_EN = """Hi! I am LineGPT. It's my pleasure to help you. Here is the usage:
+@LineGPT <Command>
+
+* Show help text
+@LineGPT help
+
+* Start a dialogue session.
+@LineGPT start
+
+* Show dialogue
+@LineGPT log
+
+* Ask a question
+@LineGPT ask <your question> 
+Example:
+@LineGPT ask What is graphene?
+
+* Close an existing dialogue session
+@LineGPT close
+
+* Restart a dialogue session
+@LineGPT restart
+"""
+
+USAGE_ZH = """嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：
+@LineGPT <指令>
+
+* 顯示使用說明
+@LineGPT help
+
+* 開始對話階段
+@LineGPT start
+
+* 顯示過往對話紀錄
+@LineGPT log
+
+* 提問
+@LineGPT ask <your question> 
+Example:
+@LineGPT ask 請告訴我怎麼變有錢人
+
+* 關閉對話階段，過往紀錄將會被刪除
+@LineGPT close
+
+* 重啟對話階段
+@LineGPT restart
+"""
 
 openai.api_key = OPENAI_API_KEY
 MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
@@ -138,3 +190,28 @@ class GPTSessions:
     def log(self, group_id: str) -> str:
         gpt = self.sessions.get(group_id)
         return MESSAGE.LOG + "\n" + gpt.dialogue_session.dump_dialogue()
+
+
+class GptCommand(Command):
+    usage_en = USAGE_EN
+    usage_zh = USAGE_ZH
+
+    def __init__(
+        self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
+    ) -> None:
+        self.subcommand = subcommand
+        self.args = args.strip()
+        self.gpt_sessions: GPTSessions = None
+
+    def load(self, gpt_sessions: GPTSessions):
+        self.gpt_sessions = gpt_sessions
+
+    def execute(self, **kwargs):
+        id = kwargs["id"]
+        try:
+            func = getattr(self.gpt_sessions, self.subcommand)
+            if self.subcommand == "talk":
+                return func(id, self.args)
+            return func(id)
+        except AttributeError:
+            return Error(MESSAGE.NOT_ALLOW_METHOD.value)

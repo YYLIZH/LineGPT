@@ -1,5 +1,6 @@
 import re
 from importlib import import_module
+from typing import Union
 
 from fastapi import FastAPI, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
@@ -16,15 +17,18 @@ line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
-def parse_command(message: str) -> Command:
-    mrx = re.search(r"^@LineGPT +(\w+)( +\w+)? +(.*)", message)
-    command_str, subcommand_str, args = mrx.groups()
-    module = import_module(f"api.commands.{command_str}")
-    command_cls = getattr(module, f"{command.title()}Command")
-    command = command_cls(subcommand_str, args)
-    if command_str == "gpt":
-        command.load(GPT_Sessions)
-    return command
+def parse_command(message: str) -> Union[str, Command]:
+    try:
+        mrx = re.search(r"^@LineGPT +(\w+)( +\w+)? +(.*)", message)
+        command_str, subcommand_str, args = mrx.groups()
+        module = import_module(f"api.commands.{command_str}")
+        command_cls = getattr(module, f"{command.title()}Command")
+        command = command_cls(subcommand_str, args)
+        if command_str == "gpt":
+            command.load(GPT_Sessions)
+        return command
+    except Exception:
+        return "Wrong format"
 
 
 @app.get("/")
@@ -58,8 +62,8 @@ def handling_message(event):
                 id = getattr(event.source, "group_id")
             except AttributeError:
                 id = getattr(event.source, "user_id")
-            command: Command = parse_command(message, GPT_Sessions)
-            result = command.execute(**{"id": id})
+            command = parse_command(message, GPT_Sessions)
+            result = command.execute(**{"id": id}) if isinstance(Command) else command
             if result:
                 echoMessages = TextSendMessage(text=result)
                 line_bot_api.reply_message(

@@ -11,7 +11,7 @@ class Command(ABC):
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
     ) -> None:
-        self.args = args
+        self.args = args.strip()
 
     def execute(self, **kwargs):
         raise NotImplementedError
