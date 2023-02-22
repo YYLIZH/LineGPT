@@ -63,7 +63,11 @@ def handling_message(event):
             except AttributeError:
                 id = getattr(event.source, "user_id")
             command = parse_command(message)
-            result = command.execute(**{"id": id}) if isinstance(command,Command) else command
+            result = (
+                command.execute(**{"id": id})
+                if isinstance(command, Command)
+                else command
+            )
             if result:
                 echoMessages = TextSendMessage(text=str(result))
                 line_bot_api.reply_message(
