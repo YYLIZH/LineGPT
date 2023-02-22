@@ -1,6 +1,5 @@
 from collections import defaultdict
 from enum import Enum
-from typing import Union
 from urllib import parse
 
 import requests
@@ -42,6 +41,9 @@ class MessageZH(Enum):
     REMIND_UMBRELLA = "今天可能會下雨，出門記得帶傘"
 
 
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
+
+
 class WeatherCommand(Command):
     available_location = [
         "宜蘭縣",
@@ -72,12 +74,6 @@ class WeatherCommand(Command):
         super().__init__(args)
         self.location = self.args.strip()
 
-    @property
-    def message(self) -> Union[MessageEN, MessageZH]:
-        if LANGUAGE == "en":
-            return MessageEN
-        return MessageZH
-
     @staticmethod
     def help_en():
         help_text = """
@@ -100,7 +96,7 @@ Example:
 
     def execute(self):
         if self.location not in self.available_location:
-            return Error(self.message.UNAVAILABLE_LOCATION.value)
+            return Error(MESSAGE.UNAVAILABLE_LOCATION.value)
         data = requests.get(
             (
                 "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001"
@@ -111,7 +107,7 @@ Example:
         ).json()
 
         if data["success"] != "true":
-            return Warning(self.message.GET_DATA_FAILED.value)
+            return Warning(MESSAGE.GET_DATA_FAILED.value)
 
         data_dict = defaultdict(list)
         for el in data["records"]["location"][0]["weatherElement"]:
@@ -123,16 +119,16 @@ Example:
 
         message = []
         if int(min(data_dict["MinT"])) < 15:
-            message.append(self.message.CANNOT_WORK_COLD.value)
+            message.append(MESSAGE.CANNOT_WORK_COLD.value)
 
         if int(max(data_dict["MaxT"])) > 30:
-            message.append(self.message.CANNOT_WORK_HOT.value)
+            message.append(MESSAGE.CANNOT_WORK_HOT.value)
 
         if 100 > int(min(data_dict["PoP"])) > 60:
-            message.append(self.message.REMIND_UMBRELLA.value)
+            message.append(MESSAGE.REMIND_UMBRELLA.value)
 
         if int(min(data_dict["PoP"])) == 100:
-            message.append(self.message.CANNOT_WORK_RAIN.value)
+            message.append(MESSAGE.CANNOT_WORK_RAIN.value)
 
         report_list = []
         for i in range(3):
@@ -142,7 +138,7 @@ Example:
             report_list.append(REPORT.render(report_data))
 
         return (
-            self.message.WEATHER_HEADING.value
+            MESSAGE.WEATHER_HEADING.value
             + "\n\n"
             + "\n".join(report_list)
             + "\n\n"

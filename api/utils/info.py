@@ -1,4 +1,3 @@
-import os
 from api.utils.configs import LANGUAGE
 
 

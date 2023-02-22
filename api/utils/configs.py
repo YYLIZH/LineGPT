@@ -22,11 +22,12 @@ def _parse_necessary(key: str) -> str:
 
 
 @cache
-def parse_main() -> str:
+def parse_main():
     lang = environ.get("LANGUAGE")
-    if lang in ["zh", "en"]:
-        return lang
-    return "zh"
+    sesssion_expired = environ.get("SESSION_EXPIRE")
+    if lang not in ["zh", "en"]:
+        lang = "zh"
+    return lang, sesssion_expired
 
 
 @cache
@@ -77,7 +78,7 @@ def parse_open_data() -> str:
     return "NODATA"
 
 
-LANGUAGE = parse_main()
+LANGUAGE, SESSION_EXPIRED = parse_main()
 LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN = parse_line()
 (
     OPENAI_MODEL,
