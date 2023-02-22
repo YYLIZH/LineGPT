@@ -9,5 +9,5 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && apt-get update \
     && apt-get install -y \
     && mkdir /work
-COPY ./src /work/src
+COPY ./api /work/api
 WORKDIR /work

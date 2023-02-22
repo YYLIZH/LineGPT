@@ -7,7 +7,7 @@ Add a ChatGPT linebot in your group as your group's assistant.
 
 # Open Server
 ```
-uvicorn src.main:app --reload
+uvicorn api.index:app --reload
 ```
 
 # Api Page
