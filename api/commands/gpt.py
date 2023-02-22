@@ -51,9 +51,6 @@ class MessageZH(Enum):
 USAGE_EN = """Hi! I am LineGPT. It's my pleasure to help you. Here is the usage:
 @LineGPT <Command>
 
-* Show help text
-@LineGPT help
-
 * Start a dialogue session.
 @LineGPT start
 
@@ -118,7 +115,7 @@ class DialogueSession:
 
     def is_expired(self) -> bool:
         time_delta: datetime.timedelta = datetime.datetime.now() - self.last_update_time
-        if time_delta.seconds >= SESSION_EXPIRED:
+        if time_delta.seconds >= int(SESSION_EXPIRED):
             return True
         return False
 
@@ -180,10 +177,13 @@ class GPTSessions:
         return MESSAGE.CLOSE.value
 
     def talk(self, group_id: str, text: str) -> str:
+        if not self.sessions.get(group_id):
+            return Warning(MESSAGE.NO_SESSION.value)
         gpt = self.sessions.get(group_id)
         try:
             return gpt.talk(text)
-        except Exception:
+        except Exception as e:
+            return str(e)
             self.sessions[group_id] = GPT()
             return Error(MESSAGE.UNEXPECTED_ERROR.value)
 
@@ -199,7 +199,7 @@ class GptCommand(Command):
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
     ) -> None:
-        self.subcommand = subcommand
+        self.subcommand = subcommand.strip()
         self.args = args.strip()
         self.gpt_sessions: GPTSessions = None
 

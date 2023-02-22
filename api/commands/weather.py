@@ -133,7 +133,7 @@ Example:
 
         return (
             MESSAGE.WEATHER_HEADING.value
-            + "\n\n"
+            + "\n"
             + "\n".join(report_list)
             + "\n\n"
             + ",".join(message)
