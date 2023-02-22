@@ -1,22 +1,20 @@
-from abc import ABC, abstractmethod
+import typing
+from abc import ABC
+
 from api.utils.configs import LANGUAGE
 
 
 class Command(ABC):
-    def __init__(self, args: str) -> None:
+    usage_en = ""
+    usage_zh = ""
+
+    def __init__(
+        self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
+    ) -> None:
         self.args = args
 
-    @staticmethod
-    def help_en():
-        pass
-
-    @staticmethod
-    def help_zh():
-        pass
-
-    def execute(self):
+    def execute(self, **kwargs):
         raise NotImplementedError
 
-    @classmethod
-    def print_help(cls):
-        return getattr(cls, f"help_{LANGUAGE}")()
+    def print_usage(cls):
+        return getattr(cls, f"usage_{LANGUAGE}")

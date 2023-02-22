@@ -1,3 +1,4 @@
+import typing
 from collections import defaultdict
 from enum import Enum
 from urllib import parse
@@ -69,32 +70,25 @@ class WeatherCommand(Command):
         "嘉義市",
         "屏東縣",
     ]
-
-    def __init__(self, args: str) -> None:
-        super().__init__(args)
-        self.location = self.args.strip()
-
-    @staticmethod
-    def help_en():
-        help_text = """
+    usage_en = """
 * Check for the weather in the next 36 hours
 @LineGPT weather <location>
 Example:
 @LineGPT weather 嘉義縣
         """
-        return help_text
-
-    @staticmethod
-    def help_zh():
-        help_text = """
-# 查詢未來36小時的天氣預報
+    usage_zh = """
+* 查詢未來36小時的天氣預報
 @LineGPT weather <地點>
 Example:
 @LineGPT weather 嘉義縣
         """
-        return help_text
 
-    def execute(self):
+    def __init__(
+        self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
+    ) -> None:
+        self.location = args.strip()
+
+    def execute(self, **kwargs):
         if self.location not in self.available_location:
             return Error(MESSAGE.UNAVAILABLE_LOCATION.value)
         data = requests.get(

@@ -1,31 +1,30 @@
-import os
+import re
+from importlib import import_module
 
-from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-BASE_DIR = os.path.dirname(__file__)
-
-load_dotenv()
-
-from api.linegpt import LineGPT
-from api.commands.weather import WeatherCommand
-
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
-
-if (
-    LINE_CHANNEL_SECRET == "hakuna-matata"
-    or LINE_CHANNEL_ACCESS_TOKEN == "hakuna-matata"
-):
-    raise ValueError("Please set the .env value correctly.")
+from api.commands.base import Command
+from api.commands.gpt import GPTSessions
+from api.utils.configs import LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
 
 app = FastAPI()
-lineGPT = LineGPT()
+GPT_Sessions = GPTSessions()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
+
+
+def parse_command(message: str) -> Command:
+    mrx = re.search(r"^@LineGPT +(\w+)( +\w+)? +(.*)", message)
+    command_str, subcommand_str, args = mrx.groups()
+    module = import_module(f"api.commands.{command_str}")
+    command_cls = getattr(module, f"{command.title()}Command")
+    command = command_cls(subcommand_str, args)
+    if command_str == "gpt":
+        command.load(GPT_Sessions)
+    return command
 
 
 @app.get("/")
@@ -53,8 +52,16 @@ async def LineGPTBot(request: Request):
 def handling_message(event):
     replyToken = event.reply_token
     if event.message:
-        message = event.message.text
+        message: str = event.message.text
         if message.startswith("@LineGPT"):
-            gpt_message = lineGPT.select_command(message)
-            echoMessages = TextSendMessage(text=gpt_message)
-            line_bot_api.reply_message(reply_token=replyToken, messages=echoMessages)
+            try:
+                id = getattr(event.source, "group_id")
+            except AttributeError:
+                id = getattr(event.source, "user_id")
+            command: Command = parse_command(message, GPT_Sessions)
+            result = command.execute(**{"id": id})
+            if result:
+                echoMessages = TextSendMessage(text=result)
+                line_bot_api.reply_message(
+                    reply_token=replyToken, messages=echoMessages
+                )

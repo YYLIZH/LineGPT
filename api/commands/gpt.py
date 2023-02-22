@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Dict
 
 import openai
-from api.commands.base import Command
+
 from api.utils.configs import (
     LANGUAGE,
     OPENAI_API_KEY,
