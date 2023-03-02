@@ -2,7 +2,7 @@ import datetime
 import re
 import typing
 from enum import Enum
-from typing import Dict
+from typing import Dict, Tuple
 
 import openai
 
@@ -22,7 +22,7 @@ from api.utils.info import Error, Warning
 
 class MessageEN(Enum):
     GREETING = "Start the dialogue session."
-    FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep asking question, or restart a new session."
+    FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep talking, or restart a new session."
     NO_SESSION = "Session does not exist. Please start the session first."
     SESSION_EXPIRED = (
         "Current dialogue session is expired. Please restart the dialogue session."
@@ -48,49 +48,34 @@ class MessageZH(Enum):
     NOT_ALLOW_METHOD = "不存在的指令"
 
 
-USAGE_EN = """Hi! I am LineGPT. It's my pleasure to help you. Here is the usage:
-@LineGPT <Command>
-
-* Start a dialogue session.
-@LineGPT start
+USAGE_EN = """* Start a dialogue session.
+@LineGPT gpt start
 
 * Show dialogue
-@LineGPT log
+@LineGPT gpt log
 
 * Ask a question
-@LineGPT ask <your question> 
+@LineGPT gpt talk <your question> 
 Example:
-@LineGPT ask What is graphene?
+@LineGPT gpt talk What is graphene?
 
 * Close an existing dialogue session
-@LineGPT close
-
-* Restart a dialogue session
-@LineGPT restart
+@LineGPT gpt close
 """
 
-USAGE_ZH = """嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：
-@LineGPT <指令>
-
-* 顯示使用說明
-@LineGPT help
-
-* 開始對話階段
-@LineGPT start
+USAGE_ZH = """* 開始對話階段
+@LineGPT gpt start
 
 * 顯示過往對話紀錄
-@LineGPT log
+@LineGPT gpt log
 
 * 提問
-@LineGPT ask <your question> 
+@LineGPT gpt talk <your question> 
 Example:
-@LineGPT ask 請告訴我怎麼變有錢人
+@LineGPT gpt talk 請告訴我怎麼變有錢人
 
 * 關閉對話階段，過往紀錄將會被刪除
-@LineGPT close
-
-* 重啟對話階段
-@LineGPT restart
+@LineGPT gpt close
 """
 
 openai.api_key = OPENAI_API_KEY
@@ -176,20 +161,24 @@ class GPTSessions:
         self.sessions.pop(group_id)
         return MESSAGE.CLOSE.value
 
+    def restart(self, group_id: str) -> str:
+        gpt = GPT()
+        self.sessions[group_id] = gpt
+        return MESSAGE.GREETING.value
+
     def talk(self, group_id: str, text: str) -> str:
         if not self.sessions.get(group_id):
             return Warning(MESSAGE.NO_SESSION.value)
         gpt = self.sessions.get(group_id)
         try:
             return gpt.talk(text)
-        except Exception as e:
-            return str(e)
+        except Exception:
             self.sessions[group_id] = GPT()
             return Error(MESSAGE.UNEXPECTED_ERROR.value)
 
     def log(self, group_id: str) -> str:
         gpt = self.sessions.get(group_id)
-        return MESSAGE.LOG + "\n" + gpt.dialogue_session.dump_dialogue()
+        return MESSAGE.LOG.value + "\n" + gpt.dialogue_session.dump_dialogue()
 
 
 class GptCommand(Command):
@@ -199,8 +188,7 @@ class GptCommand(Command):
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
     ) -> None:
-        self.subcommand = subcommand.strip()
-        self.args = args.strip()
+        super().__init__(subcommand, args)
         self.gpt_sessions: GPTSessions = None
 
     def load(self, gpt_sessions: GPTSessions):
@@ -215,3 +203,9 @@ class GptCommand(Command):
             return func(id)
         except AttributeError:
             return Error(MESSAGE.NOT_ALLOW_METHOD.value)
+
+
+def parse_args(args_msg: str) -> Tuple[str, str]:
+    mrx = re.search(r"(\w+) *(.*)?", args_msg)
+    subcommand, args = mrx.groups()
+    return subcommand, args
