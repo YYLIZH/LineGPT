@@ -31,6 +31,11 @@ def test_parse_message_gpt():
     assert command.subcommand == "talk"
     assert command.args == "你好"
 
+    command = parse_message("@LineGPT gpt start")
+    assert isinstance(command, GptCommand)
+    assert command.subcommand == "start"
+    assert command.args == None
+
     command = parse_message("@LineGPT gpt help ")
     assert command == GptCommand.print_usage()
 

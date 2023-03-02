@@ -33,6 +33,12 @@ class TestGPTSession:
         res = self.gpt_sessions.close("test456")
         assert "test456" not in list(self.gpt_sessions.sessions.keys())
 
+    def test_restart(self):
+        self.gpt_sessions.restart("test123")
+        assert (
+            self.gpt_sessions.sessions["test123"].dialogue_session.dump_dialogue() == ""
+        )
+
 
 def test_help():
     command = GptCommand()

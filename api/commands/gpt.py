@@ -2,7 +2,7 @@ import datetime
 import re
 import typing
 from enum import Enum
-from typing import Dict
+from typing import Dict, Tuple
 
 import openai
 
@@ -22,7 +22,7 @@ from api.utils.info import Error, Warning
 
 class MessageEN(Enum):
     GREETING = "Start the dialogue session."
-    FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep asking question, or restart a new session."
+    FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep talking, or restart a new session."
     NO_SESSION = "Session does not exist. Please start the session first."
     SESSION_EXPIRED = (
         "Current dialogue session is expired. Please restart the dialogue session."
@@ -55,9 +55,9 @@ USAGE_EN = """* Start a dialogue session.
 @LineGPT gpt log
 
 * Ask a question
-@LineGPT gpt ask <your question> 
+@LineGPT gpt talk <your question> 
 Example:
-@LineGPT gpt ask What is graphene?
+@LineGPT gpt talk What is graphene?
 
 * Close an existing dialogue session
 @LineGPT gpt close
@@ -70,9 +70,9 @@ USAGE_ZH = """* 開始對話階段
 @LineGPT gpt log
 
 * 提問
-@LineGPT gpt ask <your question> 
+@LineGPT gpt talk <your question> 
 Example:
-@LineGPT gpt ask 請告訴我怎麼變有錢人
+@LineGPT gpt talk 請告訴我怎麼變有錢人
 
 * 關閉對話階段，過往紀錄將會被刪除
 @LineGPT gpt close
@@ -161,6 +161,11 @@ class GPTSessions:
         self.sessions.pop(group_id)
         return MESSAGE.CLOSE.value
 
+    def restart(self, group_id: str) -> str:
+        gpt = GPT()
+        self.sessions[group_id] = gpt
+        return MESSAGE.GREETING.value
+
     def talk(self, group_id: str, text: str) -> str:
         if not self.sessions.get(group_id):
             return Warning(MESSAGE.NO_SESSION.value)
@@ -198,3 +203,9 @@ class GptCommand(Command):
             return func(id)
         except AttributeError:
             return Error(MESSAGE.NOT_ALLOW_METHOD.value)
+
+
+def parse_args(args_msg: str) -> Tuple[str, str]:
+    mrx = re.search(r"(\w+) *(.*)?", args_msg)
+    subcommand, args = mrx.groups()
+    return subcommand, args

@@ -1,6 +1,6 @@
-import typing
 from collections import defaultdict
 from enum import Enum
+from typing import Optional, Tuple
 from urllib import parse
 
 import requests
@@ -82,7 +82,7 @@ Example:
         """
 
     def __init__(
-        self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
+        self, subcommand: Optional[str] = None, args: Optional[str] = None
     ) -> None:
         super().__init__(subcommand, args)
         self.location = self.args
@@ -137,3 +137,8 @@ Example:
             + "\n\n"
             + ",".join(message)
         )
+
+
+def parse_args(args_msg: str) -> Tuple[str, str]:
+    args = args_msg.strip()
+    return None, args
