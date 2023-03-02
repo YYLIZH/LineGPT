@@ -7,9 +7,11 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
+from api.commands import commands_info, print_usage
 from api.commands.base import Command
-from api.commands.gpt import GPTSessions
+from api.commands.gpt import GptCommand, GPTSessions
 from api.utils.configs import LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
+from api.utils.info import Error
 
 app = FastAPI()
 GPT_Sessions = GPTSessions()
@@ -17,18 +19,24 @@ line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
-def parse_command(message: str) -> Union[str, Command]:
-    try:
-        mrx = re.search(r"^@LineGPT +(\w+)( +\w+)? +(.*)", message)
-        command_str, subcommand_str, args = mrx.groups()
-        module = import_module(f"api.commands.{command_str}")
-        command_cls = getattr(module, f"{command_str.title()}Command")
-        command = command_cls(subcommand_str, args)
-        if command_str == "gpt":
-            command.load(GPT_Sessions)
-        return command
-    except Exception as e:
-        return "Wrong format"
+def parse_message(message: str) -> Union[str, Command]:
+    if re.match(r"^@LineGPT( help.*)?$", message):
+        return print_usage()
+    mrx = re.search(r"^@LineGPT +(\w+)( +\w+)? +(.*)", message)
+    if not mrx:
+        return str(Error("Wrong format")) + "\n" + print_usage()
+    command_str, subcommand_str, args = mrx.groups()
+    command_info = commands_info.get(command_str)
+    if not command_info:
+        return str(Error("No such command")) + "\n" + print_usage()
+    module = import_module(command_info.module_path)
+    command_cls: Command = getattr(module, command_info.class_name)
+    command = command_cls(subcommand_str, args)
+    if "help" in message:
+        return command_cls.print_usage()
+    if isinstance(command, GptCommand):
+        command.load(GPT_Sessions)
+    return command
 
 
 @app.get("/")
@@ -62,12 +70,13 @@ def handling_message(event):
                 id = getattr(event.source, "group_id")
             except AttributeError:
                 id = getattr(event.source, "user_id")
-            command = parse_command(message)
-            result = (
-                command.execute(**{"id": id})
-                if isinstance(command, Command)
-                else command
-            )
+            parse_result = parse_message(message)
+            if isinstance(parse_result, Command):
+                command: Command = parse_result
+                result = command.execute(**{"id": id})
+            else:
+                result = parse_result
+
             if result:
                 echoMessages = TextSendMessage(text=str(result))
                 line_bot_api.reply_message(

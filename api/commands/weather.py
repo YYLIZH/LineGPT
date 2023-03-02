@@ -70,14 +70,12 @@ class WeatherCommand(Command):
         "嘉義市",
         "屏東縣",
     ]
-    usage_en = """
-* Check for the weather in the next 36 hours
+    usage_en = """* Check for the weather in the next 36 hours
 @LineGPT weather <location>
 Example:
 @LineGPT weather 嘉義縣
         """
-    usage_zh = """
-* 查詢未來36小時的天氣預報
+    usage_zh = """* 查詢未來36小時的天氣預報
 @LineGPT weather <地點>
 Example:
 @LineGPT weather 嘉義縣
@@ -86,7 +84,8 @@ Example:
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
     ) -> None:
-        self.location = args.strip()
+        super().__init__(subcommand, args)
+        self.location = self.args
 
     def execute(self, **kwargs):
         if self.location not in self.available_location:
