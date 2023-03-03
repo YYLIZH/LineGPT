@@ -22,7 +22,7 @@ line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 def parse_message(message: str) -> Union[str, Command]:
     if re.match(r"^@LineGPT( help.*)?$", message):
         return print_usage()
-    mrx = re.search(r"^@LineGPT +(\w+) +(.*)", message)
+    mrx = re.search(r"^@LineGPT +(\w+) *([\s\S]*)", message)
     if not mrx:
         return str(Error("Wrong format")) + "\n" + print_usage()
     command_str, other = mrx.groups()

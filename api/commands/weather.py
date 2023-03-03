@@ -72,11 +72,13 @@ class WeatherCommand(Command):
     ]
     usage_en = """* Check for the weather in the next 36 hours
 @LineGPT weather <location>
+
 Example:
 @LineGPT weather 嘉義縣
         """
     usage_zh = """* 查詢未來36小時的天氣預報
 @LineGPT weather <地點>
+
 Example:
 @LineGPT weather 嘉義縣
         """

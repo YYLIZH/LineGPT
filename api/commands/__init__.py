@@ -11,6 +11,12 @@ commands_info: Dict[str, CommandInfo] = {
     "weather": CommandInfo(
         "api.commands.weather", "WeatherCommand", "Check the weather", "查看天氣"
     ),
+    "settle": CommandInfo(
+        "api.commands.settle",
+        "SettleCommand",
+        "Settle the expenses among a group",
+        "多人分帳",
+    ),
 }
 
 
