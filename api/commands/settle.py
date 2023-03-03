@@ -43,7 +43,7 @@ Example:
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
     ) -> None:
-        args=args.replace("：",":") # Replace chinese full colon
+        args = args.replace("：", ":")  # Replace chinese full colon
         super().__init__(subcommand, args)
         self.expenses = {}
 
