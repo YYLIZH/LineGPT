@@ -1,67 +1,70 @@
 # LineGPT
 
-[中文](README_zh.md) | English
+中文 | [English](README.md)
 
-A linebot with assistance of ChatGPT.
+加入了 ChatGPT 的 LINE 機器人
 
-## Usage
+## 使用說明
 
-The functions of LineGPT are defined by several commands. You can use help to list available commands. <br>
+LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
+<br>
+可以用 help 指令查詢目前支援的全部指令。
 
 ```
 @LineGPT help
 ```
-![help](doc/en/help_en.jpg)
+![help](doc/zh/help_zh.jpg)
+
 ## ChatGPT
 
-Let ChatGPT help you.
+讓 ChatGPT 幫助你。
 
 ```
 @LineGPT gpt help
 ```
-![gpt help](doc/en/gpt_help_en.jpg)
-## Weather (Currently only support weather in Taiwan)
+![gpt help](doc/zh/gpt_help_zh.jpg)
 
-Check the weather in your place.
+## Weather (目前只支援Taiwan天氣)
+
+查詢你所在位置的天氣情報。
 
 ```
 @LineGPT weather help
 ```
-![weather help](doc/en/weather_help_en.jpg)
-![weather use](doc/en/weather_use_en.jpg)
+![weather help](doc/zh/weather_help_zh.jpg)
+![weather use](doc/zh/weather_use_zh.jpg)
 ## Settle
 
-Need to know how much you should pay? Let LineGPT settle a groups' expense!
+跟朋友出遊，卻永遠不知道誰該付多少錢嗎？讓 LineGPT 幫你算好！
 
 ```
 @LineGPT settle help
 ```
-![settle help](doc/en/settle_help_en.jpg)
-
+![settle help](doc/zh/settle_help_zh.jpg)
 ## Developer's guide
 
-### Environment variable
+### 環境變數
 
-Settings are listed in a .env file. Here offering a template '.env.template' for user to setup your personal setting for this bot.<br>
-| Item | Necessity | Default value | Note |
+需要 .env 這個檔案用做設定檔，此專案提供 .env.template 讓使用者做修改。以下是相關設定。<br>
+| Item | 必需 | 預設值 | Note |
 | ------------------------- | :-------------------------------------------------------------------------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| LANGUAGE | NO | zh | Default is Traditional Chinese. |
+| LANGUAGE | NO | zh | 繁體中文 |
 | LINE_CHANNEL_SECRET | YES | "" | Channel secret of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
 | LINE_CHANNEL_ACCESS_TOKEN | YES | "" | Channel access token of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
-| OPEN_AI_KEY | Perhaps. You still can use commands except for 'gpt' if this item is empty. | "" | Please check [this link](https://platform.openai.com/account/api-keys) to see how to get an api key. |
-| OPEN_AI_MODEL | NO | text-curie-001 | The model which will be used in ChatGPT. You can refer to [official documentation](https://platform.openai.com/docs/models/gpt-3) for more information. |
+| OPEN_AI_KEY | 可設可不設。不設的話還是可以用ChatGPT以外的指令。 | "" | [這裡](https://platform.openai.com/account/api-keys) 可以查詢如何獲得api key。 |
+| OPEN_AI_MODEL | NO | text-curie-001 | ChatGPT 可以使用的語言模型.  [官方文件](https://platform.openai.com/docs/models/gpt-3) 有詳細說明。每種api的計費方式也都不同。 |
 | OPENAI_TEMPERATURE | NO | 0.9 | Between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. More information: [temperature](https://platform.openai.com/docs/api-reference/completions/create#completions/create-temperature) |
 | OPENAI_MAX_TOKEN | NO | 150 | The maximum number of tokens to generate in the completion. More information: [max_tokens](https://platform.openai.com/docs/api-reference/completions/create#completions/create-max_tokens) |
 | OPENAI_PRESENCE_PENALTY | NO | 0.6 | Between -2.0 and 2.0. Positive values increase the model's likelihood to talk about new topics. More information: [presence_penalty](https://platform.openai.com/docs/api-reference/completions/create#completions/create-presence_penalty) |
 | OPEN_FREQUENCY_PENALTY | NO | 0.0 | Between -2.0 and 2.0. Positive values decrease the model's likelihood to repeat the same line verbatim. More information: [frequency_penalty](https://platform.openai.com/docs/api-reference/completions/create#completions/create-frequency_penalty) |
-| SESSION_EXPIRE | NO | 600 | To save the memory, you can not talk to ChatGPT after <SESSION_EXPIRE> time since last update. |
-| WEATHER_TOKEN | NO | "" | You can set your own token or simply use mine. If you want to use your own token. Please refer the [official website](https://opendata.cwb.gov.tw/devManual/insrtuction) to see how to get a token. |
+| SESSION_EXPIRE | NO | 600 | 單位是秒。為了節省記憶體, 在最後一次與ChatGPT對話之後就會開始計時，<SESSION_EXPIRE>之後就不能基於之前的對話繼續對話，必須重新開啟對話階段。 |
+| WEATHER_TOKEN | NO | "" | 可以不用額外設計，會使用我自己的token。如果你真的很想自己弄一個的話，可以按照[官方文件](https://opendata.cwb.gov.tw/devManual/insrtuction) 查詢如何獲取token。 |
 
-Note: After you fill in these variable, please rename the .env.template to .env.
+注意：填完.env.template之後，需要把此檔案更名成.env 才會完成設置。
 
-### Testing
+### 測試
 
-1. Start the server
+1. 開啟fastapi server
 
 ```
 uvicorn api.index:app --reload
@@ -70,7 +73,7 @@ uvicorn api.index:app --reload
 api page will be
 http://127.0.0.1:8000/docs
 
-2. Open ngrok
+2. ngrok
 
 ```
 ngrok http 8000
