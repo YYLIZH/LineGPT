@@ -11,7 +11,7 @@ The functions of LineGPT are defined by several commands. You can use help to li
 ```
 @LineGPT help
 ```
-
+![help](doc/en/help_en.jpg)
 ## ChatGPT
 
 Let ChatGPT help you.
@@ -19,7 +19,7 @@ Let ChatGPT help you.
 ```
 @LineGPT gpt help
 ```
-
+![gpt help](doc/en/gpt_help_en.jpg)
 ## Weather (Currently only support weather in Taiwan)
 
 Check the weather in your place.
@@ -27,7 +27,8 @@ Check the weather in your place.
 ```
 @LineGPT weather help
 ```
-
+![weather help](doc/en/weather_help_en.jpg)
+![weather use](doc/en/weather_use_en.jpg)
 ## Settle
 
 Need to know how much you should pay? Let LineGPT settle a groups' expense!
@@ -35,6 +36,7 @@ Need to know how much you should pay? Let LineGPT settle a groups' expense!
 ```
 @LineGPT settle help
 ```
+![settle help](doc/en/settle_help_en.jpg)
 
 ## Developer's guide
 
