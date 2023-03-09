@@ -24,10 +24,10 @@ def _parse_necessary(key: str) -> str:
 @cache
 def parse_main():
     lang = environ.get("LANGUAGE")
-    sesssion_expired = environ.get("SESSION_EXPIRE")
+    session_expired = environ.get("SESSION_EXPIRE")
     if lang not in ["zh", "en"]:
         lang = "zh"
-    return lang, sesssion_expired
+    return lang, session_expired
 
 
 @cache
