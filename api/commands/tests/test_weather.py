@@ -18,4 +18,4 @@ def test_no_area():
 def test_help():
     command = WeatherCommand()
     result = command.print_usage()
-    assert result == WeatherCommand.usage_en or result == WeatherCommand.usage_zh
+    assert result == WeatherCommand.usage_en or result == WeatherCommand.usage_zh_TW

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 import typing
 
@@ -23,7 +25,7 @@ Iron man -> Superman 60.0
 Spiderman -> Superman 20.0
 """
 
-    usage_zh = """* 多人分帳
+    usage_zh_TW = """* 多人分帳
 @LineGPT settle
 <chart>
 
@@ -46,6 +48,11 @@ Example:
         args = args.replace("：", ":")  # Replace chinese full colon
         super().__init__(subcommand, args)
         self.expenses = {}
+
+    @classmethod
+    def setup(cls, args_msg: str) -> SettleCommand:
+        args = args_msg.lstrip()
+        return cls(None, args)
 
     def execute(self, **kwargs):
         self.parse_expense()
@@ -93,7 +100,3 @@ Example:
             owed[person2] += amount
 
         return transactions
-
-
-def parse_args(args_msg: str) -> typing.Tuple[str, str]:
-    return None, args_msg.lstrip()

@@ -13,7 +13,7 @@ LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
 ```
 @LineGPT help
 ```
-![help](doc/zh/help_zh.jpg)
+![help](doc/zh_TW/help_zh_TW.jpg)
 
 ## ChatGPT
 
@@ -22,7 +22,7 @@ LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
 ```
 @LineGPT gpt help
 ```
-![gpt help](doc/zh/gpt_help_zh.jpg)
+![gpt help](doc/zh_TW/gpt_help_zh_TW.jpg)
 
 ## Weather (目前只支援Taiwan天氣)
 
@@ -31,8 +31,8 @@ LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
 ```
 @LineGPT weather help
 ```
-![weather help](doc/zh/weather_help_zh.jpg)
-![weather use](doc/zh/weather_use_zh.jpg)
+![weather help](doc/zh_TW/weather_help_zh_TW.jpg)
+![weather use](doc/zh_TW/weather_use_zh_TW.jpg)
 ## Settle
 
 跟朋友出遊，卻永遠不知道誰該付多少錢嗎？讓 LineGPT 幫你算好！
@@ -40,7 +40,7 @@ LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
 ```
 @LineGPT settle help
 ```
-![settle help](doc/zh/settle_help_zh.jpg)
+![settle help](doc/zh_TW/settle_help_zh_TW.jpg)
 ## Developer's guide
 
 ### 環境變數
@@ -48,7 +48,7 @@ LineGPT 採用指令控制，在輸入筐輸入相關指令即可使用。
 需要 .env 這個檔案用做設定檔，此專案提供 .env.template 讓使用者做修改。以下是相關設定。<br>
 | Item | 必需 | 預設值 | Note |
 | ------------------------- | :-------------------------------------------------------------------------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| LANGUAGE | NO | zh | 繁體中文 |
+| LANGUAGE | NO | zh_TW | 繁體中文 |
 | LINE_CHANNEL_SECRET | YES | "" | Channel secret of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
 | LINE_CHANNEL_ACCESS_TOKEN | YES | "" | Channel access token of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
 | OPEN_AI_KEY | 可設可不設。不設的話還是可以用ChatGPT以外的指令。 | "" | [這裡](https://platform.openai.com/account/api-keys) 可以查詢如何獲得api key。 |

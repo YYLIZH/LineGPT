@@ -1,6 +1,6 @@
 # LineGPT
 
-[中文](README_zh.md) | English
+[中文](README_zh_TW.md) | English
 
 A linebot with assistance of ChatGPT.
 
@@ -45,7 +45,7 @@ Need to know how much you should pay? Let LineGPT settle a groups' expense!
 Settings are listed in a .env file. Here offering a template '.env.template' for user to setup your personal setting for this bot.<br>
 | Item | Necessity | Default value | Note |
 | ------------------------- | :-------------------------------------------------------------------------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| LANGUAGE | NO | zh | Default is Traditional Chinese. |
+| LANGUAGE | NO | zh_TW | Default is Traditional Chinese. |
 | LINE_CHANNEL_SECRET | YES | "" | Channel secret of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
 | LINE_CHANNEL_ACCESS_TOKEN | YES | "" | Channel access token of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
 | OPEN_AI_KEY | Perhaps. You still can use commands except for 'gpt' if this item is empty. | "" | Please check [this link](https://platform.openai.com/account/api-keys) to see how to get an api key. |

@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import datetime
 import re
 import typing
 from enum import Enum
-from typing import Dict, Tuple
+from typing import Dict
 
 import openai
+from jinja2 import Template
 
 from api.commands.base import Command
 from api.utils.configs import (
@@ -21,6 +24,7 @@ from api.utils.info import Error, Warning
 
 
 class MessageEN(Enum):
+    UNACTIVE = "Cannot activate. 'OPENAI_API_KEY' has not been set in .env."
     GREETING = "Start the dialogue session."
     FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep talking, or restart a new session."
     NO_SESSION = "Session does not exist. Please start the session first."
@@ -35,7 +39,8 @@ class MessageEN(Enum):
     NOT_ALLOW_METHOD = "This method is not allowed."
 
 
-class MessageZH(Enum):
+class MessageZHTW(Enum):
+    UNACTIVE = "無法啟動。 尚未在.env設定'OPENAI_API_KEY'"
     GREETING = "對話階段已開始"
     FOUND_SESSION = "存在舊有的對話階段，您可以查看紀錄、繼續對話、或是重啟對話階段。"
     NO_SESSION = '尚未開啟對話階段，請先使用"@LineGPT start"開啟對話。'
@@ -47,6 +52,13 @@ class MessageZH(Enum):
     LOG = "以下是對話紀錄："
     NOT_ALLOW_METHOD = "不存在的指令"
 
+
+LOG_TEMPLATE = Template(
+    """{% for message in log %}
+{{ "{:>10}".format(message.role) }}: {{message.content}}
+{% endfor %}""",
+    trim_blocks=True,
+)
 
 USAGE_EN = """* Start a dialogue session.
 @LineGPT gpt start
@@ -63,7 +75,7 @@ Example:
 @LineGPT gpt close
 """
 
-USAGE_ZH = """* 開始對話階段
+USAGE_ZH_TW = """* 開始對話階段
 @LineGPT gpt start
 
 * 顯示過往對話紀錄
@@ -79,24 +91,26 @@ Example:
 """
 
 openai.api_key = OPENAI_API_KEY
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 
 class DialogueSession:
     def __init__(self) -> None:
-        self.dialogue = []
+        self.dialogue = [
+            {
+                "role": "system",
+                "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'.",
+            }
+        ]
         self.last_update_time = datetime.datetime.now()
 
     def add_ai_text(self, text: str) -> None:
-        self.dialogue.append(f"AI: {text}")
+        self.dialogue.append({"role": "assistant", "content": text})
         self.last_update_time = datetime.datetime.now()
 
     def add_human_text(self, text: str) -> None:
-        self.dialogue.append(f"Human: {text}")
+        self.dialogue.append({"role": "user", "content": text})
         self.last_update_time = datetime.datetime.now()
-
-    def dump_dialogue(self) -> str:
-        return "\n".join(self.dialogue)
 
     def is_expired(self) -> bool:
         time_delta: datetime.timedelta = datetime.datetime.now() - self.last_update_time
@@ -115,19 +129,18 @@ class GPT:
         self.presence_penalty = OPENAI_PRESENCE_PENALTY
 
     def _talk(self):
-        response = openai.Completion.create(
+        response = openai.ChatCompletion.create(
             model=self.model,
-            prompt=self.dialogue_session.dump_dialogue(),
+            messages=self.dialogue_session.dialogue,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
             frequency_penalty=self.frequency_penalty,
             presence_penalty=self.presence_penalty,
         )
-        text = response["choices"][0]["text"].strip()
-        extracted_text = re.search(r"(\w+: +)?([\s\S]*)", text).group(2)
-        extracted_text = extracted_text.replace("AI: ", "")
-        self.dialogue_session.add_ai_text(extracted_text)
-        return extracted_text
+
+        text = response["choices"][0]["message"]["content"].strip()
+        self.dialogue_session.add_ai_text(text)
+        return text
 
     def talk(self, text):
         if self.dialogue_session is None:
@@ -178,12 +191,16 @@ class GPTSessions:
 
     def log(self, group_id: str) -> str:
         gpt = self.sessions.get(group_id)
-        return MESSAGE.LOG.value + "\n" + gpt.dialogue_session.dump_dialogue()
+        return (
+            MESSAGE.LOG.value
+            + "\n"
+            + LOG_TEMPLATE.render({"log": gpt.dialogue_session.dialogue})
+        )
 
 
 class GptCommand(Command):
     usage_en = USAGE_EN
-    usage_zh = USAGE_ZH
+    usage_zh_TW = USAGE_ZH_TW
 
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
@@ -194,7 +211,15 @@ class GptCommand(Command):
     def load(self, gpt_sessions: GPTSessions):
         self.gpt_sessions = gpt_sessions
 
+    @classmethod
+    def setup(cls, args_msg: str) -> GptCommand:
+        mrx = re.search(r"(\w+) *(.*)?", args_msg)
+        subcommand, args = mrx.groups()
+        return cls(subcommand, args)
+
     def execute(self, **kwargs):
+        if not OPENAI_API_KEY:
+            return Warning(MESSAGE.UNACTIVE.value)
         id = kwargs["id"]
         try:
             func = getattr(self.gpt_sessions, self.subcommand)
@@ -203,9 +228,3 @@ class GptCommand(Command):
             return func(id)
         except AttributeError:
             return Error(MESSAGE.NOT_ALLOW_METHOD.value)
-
-
-def parse_args(args_msg: str) -> Tuple[str, str]:
-    mrx = re.search(r"(\w+) *(.*)?", args_msg)
-    subcommand, args = mrx.groups()
-    return subcommand, args

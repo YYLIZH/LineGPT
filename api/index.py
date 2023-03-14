@@ -31,9 +31,7 @@ def parse_message(message: str) -> Union[str, Command]:
         return str(Error("No such command")) + "\n" + print_usage()
     module = import_module(command_info.module_path)
     command_cls: Command = getattr(module, command_info.class_name)
-    parse_args = getattr(module, "parse_args")
-    subcommand_str, args = parse_args(other)
-    command = command_cls(subcommand_str, args)
+    command = command_cls.setup(other)
     if "help" in message:
         return command_cls.print_usage()
     if isinstance(command, GptCommand):

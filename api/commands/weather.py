@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Optional
 from urllib import parse
 
 import requests
@@ -32,7 +34,7 @@ class MessageEN(Enum):
     REMIND_UMBRELLA = "It may rain today. Bring an umbrella with you."
 
 
-class MessageZH(Enum):
+class MessageZHTW(Enum):
     WEATHER_HEADING = "未來36小時天氣預報:"
     UNAVAILABLE_LOCATION = "該地區不適用"
     GET_DATA_FAILED = "獲取資料失敗"
@@ -42,7 +44,7 @@ class MessageZH(Enum):
     REMIND_UMBRELLA = "今天可能會下雨，出門記得帶傘"
 
 
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 
 class WeatherCommand(Command):
@@ -76,7 +78,7 @@ class WeatherCommand(Command):
 Example:
 @LineGPT weather 嘉義縣
         """
-    usage_zh = """* 查詢未來36小時的天氣預報
+    usage_zh_TW = """* 查詢未來36小時的天氣預報
 @LineGPT weather <地點>
 
 Example:
@@ -88,6 +90,11 @@ Example:
     ) -> None:
         super().__init__(subcommand, args)
         self.location = self.args
+
+    @classmethod
+    def setup(cls, args_msg: str) -> WeatherCommand:
+        args = args_msg.strip()
+        return cls(None, args)
 
     def execute(self, **kwargs):
         if self.location not in self.available_location:
@@ -139,8 +146,3 @@ Example:
             + "\n\n"
             + ",".join(message)
         )
-
-
-def parse_args(args_msg: str) -> Tuple[str, str]:
-    args = args_msg.strip()
-    return None, args
