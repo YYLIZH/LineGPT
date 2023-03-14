@@ -5,9 +5,10 @@ All modules should import env setting from this module.
 
 """
 import os
+from enum import Enum
 from functools import cache
 from typing import Tuple
-from enum import Enum
+
 from dotenv import load_dotenv
 
 load_dotenv()

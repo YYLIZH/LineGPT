@@ -15,18 +15,38 @@ class TestGPTSession:
         res = self.gpt_sessions.start("test456")
         assert isinstance(self.gpt_sessions.sessions.get("test456"), GPT)
 
-    @mock.patch("openai.Completion.create")
+    @mock.patch("openai.ChatCompletion.acreate")
     def test_talk(self, mock_openai):
-        mock_openai.return_value = {"choices": [{"text": "ai result\n"}]}
-        res = self.gpt_sessions.talk("test456", "human ask")
+        mock_openai.return_value = {
+            "choices": [
+                {
+                    "finish_reason": "stop",
+                    "index": 0,
+                    "message": {
+                        "content": "The Los Angeles Dodgers won the World Series in 2020.",
+                        "role": "assistant",
+                    },
+                }
+            ],
+            "created": 1678814998,
+            "id": "xxx",
+            "model": "gpt-3.5-turbo-0301",
+            "object": "chat.completion",
+            "usage": {"completion_tokens": 19, "prompt_tokens": 56, "total_tokens": 75},
+        }
+        res = self.gpt_sessions.talk("test456", "Who won the world series in 2020?")
         mock_openai.assert_called_once()
-        assert res == "ai result"
+        assert res == "The Los Angeles Dodgers won the World Series in 2020."
 
     def test_log(self):
         res = self.gpt_sessions.log("test123")
+        log = """    system: You are a helpful assistant.
+      user: hello
+ assistant: hi
+"""
         assert (
-            res == MessageEN.LOG.value + "\n" + "Human: hello\n" + "AI: hi"
-            or res == MessageZHTW.LOG.value + "\n" + "Human: hello\n" + "AI: hi"
+            res == MessageZHTW.LOG.value + "\n" + log
+            or res == MessageEN.LOG.value + "\n" + log
         )
 
     def test_close(self):
@@ -35,9 +55,9 @@ class TestGPTSession:
 
     def test_restart(self):
         self.gpt_sessions.restart("test123")
-        assert (
-            self.gpt_sessions.sessions["test123"].dialogue_session.dump_dialogue() == ""
-        )
+        assert self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
+            {"role": "system", "content": "You are a helpful assistant."}
+        ]
 
 
 def test_help():
