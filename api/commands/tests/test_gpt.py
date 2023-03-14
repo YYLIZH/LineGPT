@@ -15,7 +15,7 @@ class TestGPTSession:
         res = self.gpt_sessions.start("test456")
         assert isinstance(self.gpt_sessions.sessions.get("test456"), GPT)
 
-    @mock.patch("openai.ChatCompletion.acreate")
+    @mock.patch("openai.ChatCompletion.create")
     def test_talk(self, mock_openai):
         mock_openai.return_value = {
             "choices": [
@@ -40,13 +40,17 @@ class TestGPTSession:
 
     def test_log(self):
         res = self.gpt_sessions.log("test123")
-        log = """    system: You are a helpful assistant.
+        log_tw = """    system: You are a helpful assistant. Please respond in 'zh_TW'.
+      user: hello
+ assistant: hi
+"""
+        log_en = """    system: You are a helpful assistant. Please respond in 'en'.
       user: hello
  assistant: hi
 """
         assert (
-            res == MessageZHTW.LOG.value + "\n" + log
-            or res == MessageEN.LOG.value + "\n" + log
+            res == MessageZHTW.LOG.value + "\n" + log_tw
+            or res == MessageEN.LOG.value + "\n" + log_en
         )
 
     def test_close(self):
@@ -55,8 +59,11 @@ class TestGPTSession:
 
     def test_restart(self):
         self.gpt_sessions.restart("test123")
+
         assert self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
-            {"role": "system", "content": "You are a helpful assistant."}
+            {"role": "system", "content": "You are a helpful assistant. Please respond in 'zh_TW'."}
+        ] or self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
+            {"role": "system", "content": "You are a helpful assistant. Please respond in 'en'."}
         ]
 
 

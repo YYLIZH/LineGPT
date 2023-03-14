@@ -99,7 +99,7 @@ class DialogueSession:
         self.dialogue = [
             {
                 "role": "system",
-                "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'",
+                "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'.",
             }
         ]
         self.last_update_time = datetime.datetime.now()
