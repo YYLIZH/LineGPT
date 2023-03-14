@@ -6,7 +6,7 @@ from api.utils.configs import LANGUAGE
 
 class Command(ABC):
     usage_en = ""
-    usage_zh = ""
+    usage_zh_TW = ""
 
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None

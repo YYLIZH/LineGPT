@@ -1,6 +1,6 @@
 from unittest import mock
 
-from api.commands.gpt import GPT, GptCommand, GPTSessions, MessageEN, MessageZH
+from api.commands.gpt import GPT, GptCommand, GPTSessions, MessageEN, MessageZHTW
 
 
 class TestGPTSession:
@@ -26,7 +26,7 @@ class TestGPTSession:
         res = self.gpt_sessions.log("test123")
         assert (
             res == MessageEN.LOG.value + "\n" + "Human: hello\n" + "AI: hi"
-            or res == MessageZH.LOG.value + "\n" + "Human: hello\n" + "AI: hi"
+            or res == MessageZHTW.LOG.value + "\n" + "Human: hello\n" + "AI: hi"
         )
 
     def test_close(self):
@@ -43,4 +43,4 @@ class TestGPTSession:
 def test_help():
     command = GptCommand()
     result = command.print_usage()
-    assert result == GptCommand.usage_en or result == GptCommand.usage_zh
+    assert result == GptCommand.usage_en or result == GptCommand.usage_zh_TW

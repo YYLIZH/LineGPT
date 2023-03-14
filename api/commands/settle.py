@@ -23,7 +23,7 @@ Iron man -> Superman 60.0
 Spiderman -> Superman 20.0
 """
 
-    usage_zh = """* 多人分帳
+    usage_zh_TW = """* 多人分帳
 @LineGPT settle
 <chart>
 

@@ -32,7 +32,7 @@ class MessageEN(Enum):
     REMIND_UMBRELLA = "It may rain today. Bring an umbrella with you."
 
 
-class MessageZH(Enum):
+class MessageZHTW(Enum):
     WEATHER_HEADING = "未來36小時天氣預報:"
     UNAVAILABLE_LOCATION = "該地區不適用"
     GET_DATA_FAILED = "獲取資料失敗"
@@ -42,7 +42,7 @@ class MessageZH(Enum):
     REMIND_UMBRELLA = "今天可能會下雨，出門記得帶傘"
 
 
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 
 class WeatherCommand(Command):
@@ -76,7 +76,7 @@ class WeatherCommand(Command):
 Example:
 @LineGPT weather 嘉義縣
         """
-    usage_zh = """* 查詢未來36小時的天氣預報
+    usage_zh_TW = """* 查詢未來36小時的天氣預報
 @LineGPT weather <地點>
 
 Example:

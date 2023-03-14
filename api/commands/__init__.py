@@ -4,7 +4,7 @@ from typing import Dict
 from api.utils.configs import LANGUAGE
 
 CommandInfo = namedtuple(
-    "CommandInfo", "module_path, class_name, summary_en, summary_zh"
+    "CommandInfo", "module_path, class_name, summary_en, summary_zh_TW"
 )
 commands_info: Dict[str, CommandInfo] = {
     "gpt": CommandInfo("api.commands.gpt", "GptCommand", "GPT commands", "GPT 指令"),

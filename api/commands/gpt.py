@@ -35,7 +35,7 @@ class MessageEN(Enum):
     NOT_ALLOW_METHOD = "This method is not allowed."
 
 
-class MessageZH(Enum):
+class MessageZHTW(Enum):
     GREETING = "對話階段已開始"
     FOUND_SESSION = "存在舊有的對話階段，您可以查看紀錄、繼續對話、或是重啟對話階段。"
     NO_SESSION = '尚未開啟對話階段，請先使用"@LineGPT start"開啟對話。'
@@ -63,7 +63,7 @@ Example:
 @LineGPT gpt close
 """
 
-USAGE_ZH = """* 開始對話階段
+USAGE_ZHTW = """* 開始對話階段
 @LineGPT gpt start
 
 * 顯示過往對話紀錄
@@ -79,7 +79,7 @@ Example:
 """
 
 openai.api_key = OPENAI_API_KEY
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZH
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 
 class DialogueSession:
@@ -183,7 +183,7 @@ class GPTSessions:
 
 class GptCommand(Command):
     usage_en = USAGE_EN
-    usage_zh = USAGE_ZH
+    usage_zh_TW = USAGE_ZHTW
 
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
