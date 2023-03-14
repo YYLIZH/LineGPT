@@ -146,12 +146,11 @@ class GPT:
             return Warning(MESSAGE.SESSION_EXPIRED.value)
 
         self.dialogue_session.add_human_text(text)
-        response=self._talk()
-        # try:
-        #     response = self._talk()
-        # except Exception:
-        #     self.dialogue_session.dialogue.pop()
-        #     return Error(MESSAGE.RUNTIME_ERROR.value)
+        try:
+            response = self._talk()
+        except Exception:
+            self.dialogue_session.dialogue.pop()
+            return Error(MESSAGE.RUNTIME_ERROR.value)
         return response
 
 
