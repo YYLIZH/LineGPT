@@ -1,6 +1,7 @@
+from __future__ import annotations
 from collections import defaultdict
 from enum import Enum
-from typing import Optional, Tuple
+from typing import Optional
 from urllib import parse
 
 import requests
@@ -89,6 +90,11 @@ Example:
         super().__init__(subcommand, args)
         self.location = self.args
 
+    @classmethod
+    def setup(cls, args_msg: str) -> WeatherCommand:
+        args = args_msg.strip()
+        return cls(None, args)
+
     def execute(self, **kwargs):
         if self.location not in self.available_location:
             return Error(MESSAGE.UNAVAILABLE_LOCATION.value)
@@ -139,8 +145,3 @@ Example:
             + "\n\n"
             + ",".join(message)
         )
-
-
-def parse_args(args_msg: str) -> Tuple[str, str]:
-    args = args_msg.strip()
-    return None, args

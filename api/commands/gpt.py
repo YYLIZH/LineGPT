@@ -1,8 +1,9 @@
+from __future__ import annotations
 import datetime
 import re
 import typing
 from enum import Enum
-from typing import Dict, Tuple
+from typing import Dict
 
 import openai
 
@@ -63,7 +64,7 @@ Example:
 @LineGPT gpt close
 """
 
-USAGE_ZHTW = """* 開始對話階段
+USAGE_ZH_TW = """* 開始對話階段
 @LineGPT gpt start
 
 * 顯示過往對話紀錄
@@ -183,7 +184,7 @@ class GPTSessions:
 
 class GptCommand(Command):
     usage_en = USAGE_EN
-    usage_zh_TW = USAGE_ZHTW
+    usage_zh_TW = USAGE_ZH_TW
 
     def __init__(
         self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
@@ -194,6 +195,12 @@ class GptCommand(Command):
     def load(self, gpt_sessions: GPTSessions):
         self.gpt_sessions = gpt_sessions
 
+    @classmethod
+    def setup(cls, args_msg: str) -> GptCommand:
+        mrx = re.search(r"(\w+) *(.*)?", args_msg)
+        subcommand, args = mrx.groups()
+        return cls(subcommand, args)
+
     def execute(self, **kwargs):
         id = kwargs["id"]
         try:
@@ -203,9 +210,3 @@ class GptCommand(Command):
             return func(id)
         except AttributeError:
             return Error(MESSAGE.NOT_ALLOW_METHOD.value)
-
-
-def parse_args(args_msg: str) -> Tuple[str, str]:
-    mrx = re.search(r"(\w+) *(.*)?", args_msg)
-    subcommand, args = mrx.groups()
-    return subcommand, args

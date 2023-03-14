@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 import typing
 
@@ -47,6 +48,11 @@ Example:
         super().__init__(subcommand, args)
         self.expenses = {}
 
+    @classmethod
+    def setup(cls, args_msg: str) -> SettleCommand:
+        args = args_msg.lstrip()
+        return cls(None, args)
+
     def execute(self, **kwargs):
         self.parse_expense()
         transactions = self.settle_money()
@@ -93,7 +99,3 @@ Example:
             owed[person2] += amount
 
         return transactions
-
-
-def parse_args(args_msg: str) -> typing.Tuple[str, str]:
-    return None, args_msg.lstrip()
