@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import datetime
 import re
 import typing
@@ -97,7 +96,12 @@ MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 class DialogueSession:
     def __init__(self) -> None:
-        self.dialogue = [{"role": "system", "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'"}]
+        self.dialogue = [
+            {
+                "role": "system",
+                "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'",
+            }
+        ]
         self.last_update_time = datetime.datetime.now()
 
     def add_ai_text(self, text: str) -> None:
@@ -126,14 +130,13 @@ class GPT:
 
     def _talk(self):
         response = openai.ChatCompletion.create(
-                model=self.model,
-                messages=self.dialogue_session.dialogue,
-                temperature=self.temperature,
-                max_tokens=self.max_tokens,
-                frequency_penalty=self.frequency_penalty,
-                presence_penalty=self.presence_penalty,
-            )
-        
+            model=self.model,
+            messages=self.dialogue_session.dialogue,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+            frequency_penalty=self.frequency_penalty,
+            presence_penalty=self.presence_penalty,
+        )
 
         text = response["choices"][0]["message"]["content"].strip()
         self.dialogue_session.add_ai_text(text)
@@ -146,7 +149,7 @@ class GPT:
             return Warning(MESSAGE.SESSION_EXPIRED.value)
 
         self.dialogue_session.add_human_text(text)
-        response=self._talk()
+        response = self._talk()
         # try:
         #     response = self._talk()
         # except Exception:
