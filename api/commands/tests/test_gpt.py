@@ -61,9 +61,15 @@ class TestGPTSession:
         self.gpt_sessions.restart("test123")
 
         assert self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
-            {"role": "system", "content": "You are a helpful assistant. Please respond in 'zh_TW'."}
+            {
+                "role": "system",
+                "content": "You are a helpful assistant. Please respond in 'zh_TW'.",
+            }
         ] or self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
-            {"role": "system", "content": "You are a helpful assistant. Please respond in 'en'."}
+            {
+                "role": "system",
+                "content": "You are a helpful assistant. Please respond in 'en'.",
+            }
         ]
 
 
