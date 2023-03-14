@@ -56,7 +56,7 @@ def _parse_necessary(key: str) -> str:
 def parse_main() -> str:
     lang = environ.get("LANGUAGE")
     if lang not in LANGUAGE_Enum.available():
-        return Default.LANGUAGE
+        return Default.LANGUAGE.value
     return lang
 
 
@@ -75,7 +75,7 @@ def parse_openai() -> Tuple[str, str, float, int, float, float, int]:
     }
     model = environ.get("OPENAI_MODEL")
     if not model:
-        model = Default.OPENAI_MODEL
+        model = Default.OPENAI_MODEL.value
 
     elif model not in OPENAI_MODEL_Enum.available():
         raise ValueError(f"{model} is not in allowable models.")
@@ -84,23 +84,23 @@ def parse_openai() -> Tuple[str, str, float, int, float, float, int]:
 
     temperature = float(environ.get("OPENAI_TEMPERATURE"))
     if not 0.0 <= temperature <= 2.0:
-        temperature = Default.OPENAI_TEMPERATURE
+        temperature = Default.OPENAI_TEMPERATURE.value
 
     max_token = int(environ.get("OPENAI_MAX_TOKEN"))
     if max_token > model_token[model]:
-        max_token = Default.OPENAI_MAX_TOKEN
+        max_token = Default.OPENAI_MAX_TOKEN.value
 
     presence_penalty = float(environ.get("OPENAI_PRESENCE_PENALTY"))
     if not -2.0 <= presence_penalty <= 2.0:
-        presence_penalty = Default.OPENAI_PRESENCE_PENALTY
+        presence_penalty = Default.OPENAI_PRESENCE_PENALTY.value
 
     frequency_penalty = float(environ.get("OPENAI_FREQUENCY_PENALTY"))
     if not -2.0 <= frequency_penalty <= 2.0:
-        frequency_penalty = Default.OPEN_FREQUENCY_PENALTY
+        frequency_penalty = Default.OPEN_FREQUENCY_PENALTY.value
 
     session_expire = int(environ.get("SESSION_EXPIRE"))
     if not session_expire:
-        session_expire = Default.SESSION_EXPIRE
+        session_expire = Default.SESSION_EXPIRE.value
 
     return (
         model,
@@ -115,7 +115,7 @@ def parse_openai() -> Tuple[str, str, float, int, float, float, int]:
 
 @cache
 def parse_open_data() -> str:
-    return environ.get("WEATHER_TOKEN") or Default.WEATHER_TOKEN
+    return environ.get("WEATHER_TOKEN") or Default.WEATHER_TOKEN.value
 
 
 LANGUAGE = parse_main()
