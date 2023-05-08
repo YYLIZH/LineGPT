@@ -35,3 +35,19 @@ Spiderman:  0
             "Spiderman -> Superman 20.0",
         ]
     )
+
+
+def test_settle_command_cannot_full_divide():
+    message = """Iron man: 100
+Batman：  300
+Superman: 240
+"""
+    command = SettleCommand(args=message)
+    result = command.execute()
+    assert result == "\n".join(
+        [
+            "以下是分帳結果：",
+            "Iron man -> Batman 86.7",
+            "Iron man -> Superman 26.7",
+        ]
+    )
