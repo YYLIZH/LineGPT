@@ -61,7 +61,7 @@ Example:
 
         return heading + "\n".join(
             [
-                f"{transaction[0]} -> {transaction[1]} {transaction[2]}"
+                f"{transaction[0]} -> {transaction[1]} {round(transaction[2],1)}"
                 for transaction in transactions
             ]
         )
@@ -91,7 +91,7 @@ Example:
         }
 
         transactions = []
-        while any(owed.values()):
+        while any(map(lambda x: x > 1, owed.values())):
             person1, amount1 = max(owed.items(), key=lambda x: x[1])
             person2, amount2 = min(owed.items(), key=lambda x: x[1])
             amount = min(-amount2, amount1)
