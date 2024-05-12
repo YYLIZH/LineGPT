@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import datetime
 import re
+import traceback
 import typing
 from enum import Enum
 from typing import Dict
-import traceback
+
 from g4f.client import Client
 from g4f.Provider import Bing
 from jinja2 import Template
@@ -85,10 +86,10 @@ MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 class DialogueSession:
     def __init__(self) -> None:
-        spoken_lang="English"
-        if LANGUAGE=="zh_TW":
-            spoken_lang="繁體中文"
-            
+        spoken_lang = "English"
+        if LANGUAGE == "zh_TW":
+            spoken_lang = "繁體中文"
+
         self.dialogue = [
             {
                 "role": "AI",
