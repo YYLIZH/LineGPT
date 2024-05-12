@@ -21,7 +21,11 @@ commands_info: Dict[str, CommandInfo] = {
 
 
 def print_usage():
-    heading = "嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：\n\n" "@LineGPT <指令>\n" "可用指令\n"
+    heading = (
+        "嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：\n\n"
+        "@LineGPT <指令>\n"
+        "可用指令\n"
+    )
     footer = "\n您可以使用'@LineGPT <指令> help'來查看更多資訊"
     if LANGUAGE == "en":
         heading = (

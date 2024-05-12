@@ -5,26 +5,17 @@ import re
 import typing
 from enum import Enum
 from typing import Dict
-
-import openai
+import traceback
+from g4f.client import Client
+from g4f.Provider import Bing
 from jinja2 import Template
 
 from api.commands.base import Command
-from api.utils.configs import (
-    LANGUAGE,
-    OPENAI_API_KEY,
-    OPENAI_FREQUENCY_PENALTY,
-    OPENAI_MAX_TOKEN,
-    OPENAI_MODEL,
-    OPENAI_PRESENCE_PENALTY,
-    OPENAI_TEMPERATURE,
-    SESSION_EXPIRED,
-)
+from api.utils.configs import LANGUAGE, SESSION_EXPIRED
 from api.utils.info import Error, Warning
 
 
 class MessageEN(Enum):
-    UNACTIVE = "Cannot activate. 'OPENAI_API_KEY' has not been set in .env."
     GREETING = "Start the dialogue session."
     FOUND_SESSION = "Found existing session. You can see existing session's dialog, keep talking, or restart a new session."
     NO_SESSION = "Session does not exist. Please start the session first."
@@ -40,7 +31,6 @@ class MessageEN(Enum):
 
 
 class MessageZHTW(Enum):
-    UNACTIVE = "無法啟動。 尚未在.env設定'OPENAI_API_KEY'"
     GREETING = "對話階段已開始"
     FOUND_SESSION = "存在舊有的對話階段，您可以查看紀錄、繼續對話、或是重啟對話階段。"
     NO_SESSION = '尚未開啟對話階段，請先使用"@LineGPT start"開啟對話。'
@@ -90,16 +80,19 @@ Example:
 @LineGPT gpt close
 """
 
-openai.api_key = OPENAI_API_KEY
 MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
 
 class DialogueSession:
     def __init__(self) -> None:
+        spoken_lang="English"
+        if LANGUAGE=="zh_TW":
+            spoken_lang="繁體中文"
+            
         self.dialogue = [
             {
-                "role": "system",
-                "content": f"You are a helpful assistant. Please respond in '{LANGUAGE}'.",
+                "role": "AI",
+                "content": f"You are a helpful assistant. Please respond in {spoken_lang}.",
             }
         ]
         self.last_update_time = datetime.datetime.now()
@@ -122,23 +115,14 @@ class DialogueSession:
 class GPT:
     def __init__(self) -> None:
         self.dialogue_session = DialogueSession()
-        self.model = OPENAI_MODEL
-        self.temperature = OPENAI_TEMPERATURE
-        self.max_tokens = OPENAI_MAX_TOKEN
-        self.frequency_penalty = OPENAI_FREQUENCY_PENALTY
-        self.presence_penalty = OPENAI_PRESENCE_PENALTY
 
     def _talk(self):
-        response = openai.ChatCompletion.create(
-            model=self.model,
+        client = Client(provider=Bing)
+        response = client.chat.completions.create(
+            model="Balanced",
             messages=self.dialogue_session.dialogue,
-            temperature=self.temperature,
-            max_tokens=self.max_tokens,
-            frequency_penalty=self.frequency_penalty,
-            presence_penalty=self.presence_penalty,
         )
-
-        text = response["choices"][0]["message"]["content"].strip()
+        text = response.choices[0].message.content.strip()
         self.dialogue_session.add_ai_text(text)
         return text
 
@@ -152,6 +136,7 @@ class GPT:
         try:
             response = self._talk()
         except Exception:
+            print(traceback.format_exc())
             self.dialogue_session.dialogue.pop()
             return Error(MESSAGE.RUNTIME_ERROR.value)
         return response
@@ -218,8 +203,6 @@ class GptCommand(Command):
         return cls(subcommand, args)
 
     def execute(self, **kwargs):
-        if not OPENAI_API_KEY:
-            return Warning(MESSAGE.UNACTIVE.value)
         id = kwargs["id"]
         try:
             func = getattr(self.gpt_sessions, self.subcommand)

@@ -12,7 +12,10 @@ def test_weather_command():
 def test_no_area():
     command = WeatherCommand(args="遠得要命王國")
     result = command.execute()
-    assert str(result) == "Error: Unavailable location" or str(result) == "錯誤: 該地區不適用"
+    assert (
+        str(result) == "Error: Unavailable location"
+        or str(result) == "錯誤: 該地區不適用"
+    )
 
 
 def test_help():
