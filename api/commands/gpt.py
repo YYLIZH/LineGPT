@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Dict
 
 from g4f.client import Client
-from g4f.Provider import Bing
+from g4f.Provider import OpenaiChat
 from jinja2 import Template
 
 from api.commands.base import Command
@@ -92,7 +92,7 @@ class DialogueSession:
 
         self.dialogue = [
             {
-                "role": "AI",
+                "role": "system",
                 "content": f"You are a helpful assistant. Please respond in {spoken_lang}.",
             }
         ]
@@ -118,9 +118,9 @@ class GPT:
         self.dialogue_session = DialogueSession()
 
     def _talk(self):
-        client = Client(provider=Bing)
+        client = Client(provider=OpenaiChat)
         response = client.chat.completions.create(
-            model="Balanced",
+            model="gpt-4",
             messages=self.dialogue_session.dialogue,
         )
         text = response.choices[0].message.content.strip()
