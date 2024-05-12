@@ -6,8 +6,9 @@ All modules should import env setting from this module.
 """
 
 import os
-from functools import cache
 import typing
+from functools import cache
+
 from dotenv import load_dotenv
 
 load_dotenv()
