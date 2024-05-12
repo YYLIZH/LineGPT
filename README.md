@@ -43,19 +43,13 @@ Need to know how much you should pay? Let LineGPT settle a groups' expense!
 ### Environment variable
 
 Settings are listed in a .env file. Here offering a template '.env.template' for user to setup your personal setting for this bot.<br>
-| Item | Necessity | Default value | Note |
-| ------------------------- | :-------------------------------------------------------------------------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| LANGUAGE | NO | zh_TW | Default is Traditional Chinese. |
-| LINE_CHANNEL_SECRET | YES | "" | Channel secret of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
-| LINE_CHANNEL_ACCESS_TOKEN | YES | "" | Channel access token of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information |
-| OPEN_AI_KEY | Perhaps. You still can use commands except for 'gpt' if this item is empty. | "" | Please check [this link](https://platform.openai.com/account/api-keys) to see how to get an api key. |
-| OPEN_AI_MODEL | NO | text-curie-001 | The model which will be used in ChatGPT. You can refer to [official documentation](https://platform.openai.com/docs/models/gpt-3) for more information. |
-| OPENAI_TEMPERATURE | NO | 0.9 | Between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. More information: [temperature](https://platform.openai.com/docs/api-reference/completions/create#completions/create-temperature) |
-| OPENAI_MAX_TOKEN | NO | 150 | The maximum number of tokens to generate in the completion. More information: [max_tokens](https://platform.openai.com/docs/api-reference/completions/create#completions/create-max_tokens) |
-| OPENAI_PRESENCE_PENALTY | NO | 0.6 | Between -2.0 and 2.0. Positive values increase the model's likelihood to talk about new topics. More information: [presence_penalty](https://platform.openai.com/docs/api-reference/completions/create#completions/create-presence_penalty) |
-| OPEN_FREQUENCY_PENALTY | NO | 0.0 | Between -2.0 and 2.0. Positive values decrease the model's likelihood to repeat the same line verbatim. More information: [frequency_penalty](https://platform.openai.com/docs/api-reference/completions/create#completions/create-frequency_penalty) |
-| SESSION_EXPIRE | NO | 600 | To save the memory, you can not talk to ChatGPT after <SESSION_EXPIRE> time since last update. |
-| WEATHER_TOKEN | NO | "" | You can set your own token or simply use mine. If you want to use your own token. Please refer the [official website](https://opendata.cwb.gov.tw/devManual/insrtuction) to see how to get a token. |
+| Item                      | Necessity | Default value | Note                                                                                                                                                                                                |
+| ------------------------- | :-------: | :-----------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LANGUAGE                  |    NO     |     zh_TW     | Default is Traditional Chinese.                                                                                                                                                                     |
+| LINE_CHANNEL_SECRET       |    YES    |      ""       | Channel secret of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information                                                                      |
+| LINE_CHANNEL_ACCESS_TOKEN |    YES    |      ""       | Channel access token of LINE. You can check [this link](https://developers.line.biz/en/services/messaging-api/) for more information                                                                |
+| SESSION_EXPIRE            |    NO     |      600      | To save the memory, you can not talk to ChatGPT after <SESSION_EXPIRE> time since last update.                                                                                                      |
+| WEATHER_TOKEN             |    NO     |      ""       | You can set your own token or simply use mine. If you want to use your own token. Please refer the [official website](https://opendata.cwb.gov.tw/devManual/insrtuction) to see how to get a token. |
 
 Note: After you fill in these variable, please rename the .env.template to .env.
 
@@ -64,7 +58,7 @@ Note: After you fill in these variable, please rename the .env.template to .env.
 1. Start the server
 
 ```
-uvicorn api.index:app --reload
+uvicorn api.index:app --reload --loop asyncio
 ```
 
 api page will be
