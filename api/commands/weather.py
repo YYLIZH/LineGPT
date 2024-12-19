@@ -101,7 +101,7 @@ Example:
             return Error(MESSAGE.UNAVAILABLE_LOCATION.value)
         data = requests.get(
             (
-                "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001"
+                "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001"
                 f"?Authorization={WEATHER_TOKEN}"
                 "&format=JSON"
                 f"&locationName={parse.quote(self.location)}"
