@@ -171,6 +171,7 @@ class GPTSessions:
         try:
             return gpt.talk(text)
         except Exception:
+            print(traceback.format_exc())
             self.sessions[group_id] = GPT()
             return Error(MESSAGE.UNEXPECTED_ERROR.value)
 
