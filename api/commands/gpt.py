@@ -6,9 +6,7 @@ import traceback
 import typing
 from enum import Enum
 from typing import Dict
-
-from g4f.client import Client
-from g4f.Provider import OpenaiChat
+import g4f
 from jinja2 import Template
 
 from api.commands.base import Command
@@ -118,9 +116,9 @@ class GPT:
         self.dialogue_session = DialogueSession()
 
     def _talk(self):
-        client = Client(provider=OpenaiChat)
+        client = g4f.client.Client()
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=self.dialogue_session.dialogue,
         )
         text = response.choices[0].message.content.strip()
