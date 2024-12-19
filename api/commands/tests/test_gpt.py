@@ -1,6 +1,5 @@
-from unittest import mock
-
 from api.commands import gpt
+
 
 class TestGPTSession:
     @classmethod
