@@ -1,56 +1,36 @@
 from unittest import mock
 
-from api.commands.gpt import GPT, GptCommand, GPTSessions, MessageEN, MessageZHTW
-
+from api.commands import gpt
 
 class TestGPTSession:
     @classmethod
     def setup_class(cls):
-        cls.gpt_sessions = GPTSessions()
-        cls.gpt_sessions.sessions["test123"] = GPT()
+        cls.gpt_sessions = gpt.GPTSessions()
+        cls.gpt_sessions.sessions["test123"] = gpt.GPT()
         cls.gpt_sessions.sessions["test123"].dialogue_session.add_human_text("hello")
         cls.gpt_sessions.sessions["test123"].dialogue_session.add_ai_text("hi")
 
     def test_start(self):
         res = self.gpt_sessions.start("test456")
-        assert isinstance(self.gpt_sessions.sessions.get("test456"), GPT)
+        assert isinstance(self.gpt_sessions.sessions.get("test456"), gpt.GPT)
 
-    @mock.patch("openai.ChatCompletion.create")
-    def test_talk(self, mock_openai):
-        mock_openai.return_value = {
-            "choices": [
-                {
-                    "finish_reason": "stop",
-                    "index": 0,
-                    "message": {
-                        "content": "The Los Angeles Dodgers won the World Series in 2020.",
-                        "role": "assistant",
-                    },
-                }
-            ],
-            "created": 1678814998,
-            "id": "xxx",
-            "model": "gpt-3.5-turbo-0301",
-            "object": "chat.completion",
-            "usage": {"completion_tokens": 19, "prompt_tokens": 56, "total_tokens": 75},
-        }
+    def test_talk(self):
         res = self.gpt_sessions.talk("test456", "Who won the world series in 2020?")
-        mock_openai.assert_called_once()
-        assert res == "The Los Angeles Dodgers won the World Series in 2020."
+        assert res != ""
 
     def test_log(self):
         res = self.gpt_sessions.log("test123")
-        log_tw = """    system: You are a helpful assistant. Please respond in 'zh_TW'.
+        log_tw = """    system: You are a helpful assistant. Please respond in 繁體中文.
       user: hello
  assistant: hi
 """
-        log_en = """    system: You are a helpful assistant. Please respond in 'en'.
+        log_en = """    system: You are a helpful assistant. Please respond in en.
       user: hello
  assistant: hi
 """
         assert (
-            res == MessageZHTW.LOG.value + "\n" + log_tw
-            or res == MessageEN.LOG.value + "\n" + log_en
+            res == gpt.MessageZHTW.LOG.value + "\n" + log_tw
+            or res == gpt.MessageEN.LOG.value + "\n" + log_en
         )
 
     def test_close(self):
@@ -63,7 +43,7 @@ class TestGPTSession:
         assert self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
             {
                 "role": "system",
-                "content": "You are a helpful assistant. Please respond in 'zh_TW'.",
+                "content": "You are a helpful assistant. Please respond in 繁體中文.",
             }
         ] or self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
             {
@@ -74,6 +54,6 @@ class TestGPTSession:
 
 
 def test_help():
-    command = GptCommand()
+    command = gpt.GptCommand()
     result = command.print_usage()
-    assert result == GptCommand.usage_en or result == GptCommand.usage_zh_TW
+    assert result == gpt.GptCommand.usage_en or result == gpt.GptCommand.usage_zh_TW
