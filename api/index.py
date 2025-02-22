@@ -5,16 +5,26 @@ from typing import Union
 from fastapi import FastAPI, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import (
+    MessageEvent,
+    TextMessage,
+    TextSendMessage,
+    LocationMessage,
+)
 
 from api.commands import commands_info, print_usage
 from api.commands.base import Command
 from api.commands.gpt import GptCommand, GPTSessions
-from api.utils.configs import LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET
+from api.commands.eat import EatCommand, GoogleMapSession, what_to_eat
+from api.utils.configs import (
+    LINE_CHANNEL_ACCESS_TOKEN,
+    LINE_CHANNEL_SECRET,
+)
 from api.utils.info import Error
 
 app = FastAPI()
 GPT_Sessions = GPTSessions()
+GoogleMap_Session = GoogleMapSession()
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
@@ -36,6 +46,9 @@ def parse_message(message: str) -> Union[str, Command]:
         return command_cls.print_usage()
     if isinstance(command, GptCommand):
         command.load(GPT_Sessions)
+    elif isinstance(command, EatCommand):
+        GoogleMap_Session.update_time()
+        command.load(GoogleMap_Session)
     return command
 
 
@@ -61,7 +74,7 @@ async def LineGPTBot(request: Request):
 
 
 @line_handler.add(MessageEvent, message=TextMessage)
-def handling_message(event):
+def handling_text_message(event):
     replyToken = event.reply_token
     if event.message:
         message: str = event.message.text
@@ -82,3 +95,14 @@ def handling_message(event):
                 line_bot_api.reply_message(
                     reply_token=replyToken, messages=echoMessages
                 )
+
+
+@line_handler.add(MessageEvent, message=LocationMessage)
+def handling_location_message(event):
+    replyToken = event.reply_token
+    if event.message and GoogleMap_Session.is_expired() is False:
+        latitude = event.message.latitude
+        longitude = event.message.longitude
+        result = what_to_eat(latitude, longitude)
+        echoMessages = TextSendMessage(text=str(result))
+        line_bot_api.reply_message(reply_token=replyToken, messages=echoMessages)

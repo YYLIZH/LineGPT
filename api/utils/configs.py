@@ -52,7 +52,15 @@ def parse_weather_token() -> str:
     return environ.get("WEATHER_TOKEN") or default_weather_token
 
 
+@cache
+def parse_google_api_key() -> str:
+    if environ.get("GOOGLE_API_KEY"):
+        return environ["GOOGLE_API_KEY"]
+    return ""
+
+
 LANGUAGE = parse_language()
 LINE_CHANNEL_SECRET, LINE_CHANNEL_ACCESS_TOKEN = parse_line()
 SESSION_EXPIRED = parse_session_expired()
 WEATHER_TOKEN = parse_weather_token()
+GOOGLE_API_KEY = parse_google_api_key()
