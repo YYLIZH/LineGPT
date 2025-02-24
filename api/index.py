@@ -6,17 +6,17 @@ from fastapi import FastAPI, HTTPException, Request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
+    FlexSendMessage,
+    LocationMessage,
     MessageEvent,
     TextMessage,
     TextSendMessage,
-    LocationMessage,
-    FlexSendMessage
 )
 
 from api.commands import commands_info, print_usage
 from api.commands.base import Command
-from api.commands.gpt import GptCommand, GPTSessions
 from api.commands.eat import EatCommand, GoogleMapSession, what_to_eat
+from api.commands.gpt import GptCommand, GPTSessions
 from api.utils.configs import (
     LINE_CHANNEL_ACCESS_TOKEN,
     LINE_CHANNEL_SECRET,
@@ -105,8 +105,9 @@ def handling_location_message(event):
         latitude = event.message.latitude
         longitude = event.message.longitude
         result = what_to_eat(latitude, longitude)
-        with open("test.json","w") as filep:
+        with open("test.json", "w") as filep:
             import json
-            json.dump(result,filep,indent=4)
-        flex_message = FlexSendMessage("cards",result)
+
+            json.dump(result, filep, indent=4)
+        flex_message = FlexSendMessage("cards", result)
         line_bot_api.reply_message(reply_token=replyToken, messages=flex_message)

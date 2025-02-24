@@ -55,34 +55,39 @@ def create_map_link(latitude: str, longitude: str, place_id: str) -> str:
     map_link = f"https://www.google.com/maps/search/?api=1&query={latitude}%2C{longitude}&query_place_id={place_id}"
     return map_link
 
-def calculate_distance(lat1:float, lon1:float, lat2:float, lon2:float)->str:
+
+def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> str:
     """Use Haversine Formula"""
     # 地球半徑（公里）
     R = 6371.0
-    
+
     # 將經緯度轉換為弧度
     lat1_rad = math.radians(lat1)
     lon1_rad = math.radians(lon1)
     lat2_rad = math.radians(lat2)
     lon2_rad = math.radians(lon2)
-    
+
     # 經度和緯度的差值
     dlat = lat2_rad - lat1_rad
     dlon = lon2_rad - lon1_rad
-    
+
     # 哈弗辛公式
-    a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+    )
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    
+
     # 距離（公里）
     distance = R * c
 
-    if distance>1:
+    if distance > 1:
         return f"{round(distance,2)} km"
 
     return f"{round(distance*1000,2)} m"
 
-def get_place_detail(user_lat:str,user_lng:str,place_info: dict) -> dict[str, str]:
+
+def get_place_detail(user_lat: str, user_lng: str, place_info: dict) -> dict[str, str]:
     name = str(place_info.get("name", ""))
     rating = place_info.get("rating", 0.0)
     user_ratings_total = place_info.get("user_ratings_total", 0)
@@ -94,7 +99,9 @@ def get_place_detail(user_lat:str,user_lng:str,place_info: dict) -> dict[str, st
     return {
         "name": name,
         "address": address,
-        "distance":calculate_distance(float(user_lat),float(user_lng),latitude,longitude),
+        "distance": calculate_distance(
+            float(user_lat), float(user_lng), latitude, longitude
+        ),
         "rating": rating,
         "user_ratings_total": user_ratings_total,
         "map_url": create_map_link(latitude, longitude, place_info["place_id"]),
@@ -102,7 +109,12 @@ def get_place_detail(user_lat:str,user_lng:str,place_info: dict) -> dict[str, st
 
 
 def generate_card(
-    name: str, address:str,distance:float,rating: float, user_ratings_total: int, map_url: str
+    name: str,
+    address: str,
+    distance: float,
+    rating: float,
+    user_ratings_total: int,
+    map_url: str,
 ) -> dict:
     card = {
         "type": "bubble",
@@ -167,7 +179,7 @@ def generate_card(
                                     "flex": 5,
                                 }
                             ],
-                        }
+                        },
                     ],
                 },
             ],
@@ -247,7 +259,7 @@ def what_to_eat(latitude: str, longitude: str) -> dict:
     # Format the text
     place_details = []
     for restaurant in restaurants:
-        place_detail = get_place_detail(latitude,longitude,restaurant)
+        place_detail = get_place_detail(latitude, longitude, restaurant)
         place_details.append(place_detail)
 
     flex_message_dict = generate_flex_message(place_details)

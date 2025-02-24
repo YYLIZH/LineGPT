@@ -1,5 +1,6 @@
-from api.commands import eat
 from datetime import datetime
+
+from api.commands import eat
 
 
 def test_help():
@@ -46,13 +47,13 @@ def test_get_place_detail():
         "user_ratings_total": 2745,
         "vicinity": "\u6771\u5340\u5927\u5b78\u8def1001\u865f\u4ea4\u901a\u5927\u5b78\u8cc7\u8a0a\u6280\u8853\u670d\u52d9\u4e2d\u5fc3\u524d\u9910\u4ead",
     }
-    user_lat=str(24.7876683)
-    user_lng=str(120.9976131)
-    place_detail = eat.get_place_detail(user_lat,user_lng,place_info)
+    user_lat = str(24.7876683)
+    user_lng = str(120.9976131)
+    place_detail = eat.get_place_detail(user_lat, user_lng, place_info)
     assert place_detail == {
         "name": "小木屋鬆餅 交大店",
         "address": "東區大學路1001號交通大學資訊技術服務中心前餐亭",
-        "distance":0.0,
+        "distance": 0.0,
         "rating": 4.4,
         "user_ratings_total": 2745,
         "map_url": "https://www.google.com/maps/search/?api=1&query=24.7876683%2C120.9976131&query_place_id=ChIJixrR5xE2aDQRcSR1SqrnbRs",
