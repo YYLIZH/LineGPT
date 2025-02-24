@@ -1,0 +1,730 @@
+{
+    "html_attributions": [],
+    "result": {
+        "address_components": [
+            {
+                "long_name": "55\u865f",
+                "short_name": "55\u865f",
+                "types": [
+                    "street_number"
+                ]
+            },
+            {
+                "long_name": "\u5efa\u4e2d\u8def",
+                "short_name": "\u5efa\u4e2d\u8def",
+                "types": [
+                    "route"
+                ]
+            },
+            {
+                "long_name": "\u6b66\u529f\u91cc",
+                "short_name": "\u6b66\u529f\u91cc",
+                "types": [
+                    "administrative_area_level_3",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "\u6771\u5340",
+                "short_name": "\u6771\u5340",
+                "types": [
+                    "administrative_area_level_2",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "\u65b0\u7af9\u5e02",
+                "short_name": "\u65b0\u7af9\u5e02",
+                "types": [
+                    "administrative_area_level_1",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "\u53f0\u7063",
+                "short_name": "TW",
+                "types": [
+                    "country",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "300",
+                "short_name": "300",
+                "types": [
+                    "postal_code"
+                ]
+            }
+        ],
+        "adr_address": "<span class=\"postal-code\">300</span><span class=\"country-name\">\u53f0\u7063</span><span class=\"region\">\u65b0\u7af9\u5e02</span><span class=\"locality\">\u6771\u5340</span><span class=\"street-address\">\u6b66\u529f\u91cc\u5efa\u4e2d\u8def55\u865f</span>",
+        "business_status": "OPERATIONAL",
+        "curbside_pickup": false,
+        "current_opening_hours": {
+            "open_now": true,
+            "periods": [
+                {
+                    "close": {
+                        "date": "2025-02-23",
+                        "day": 0,
+                        "time": "1500"
+                    },
+                    "open": {
+                        "date": "2025-02-23",
+                        "day": 0,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-23",
+                        "day": 0,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-02-23",
+                        "day": 0,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-25",
+                        "day": 2,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "date": "2025-02-25",
+                        "day": 2,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-25",
+                        "day": 2,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-02-25",
+                        "day": 2,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-26",
+                        "day": 3,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "date": "2025-02-26",
+                        "day": 3,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-26",
+                        "day": 3,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-02-26",
+                        "day": 3,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-27",
+                        "day": 4,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "date": "2025-02-27",
+                        "day": 4,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-27",
+                        "day": 4,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-02-27",
+                        "day": 4,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-28",
+                        "day": 5,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "date": "2025-02-28",
+                        "day": 5,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-02-28",
+                        "day": 5,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-02-28",
+                        "day": 5,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-03-01",
+                        "day": 6,
+                        "time": "1500"
+                    },
+                    "open": {
+                        "date": "2025-03-01",
+                        "day": 6,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "date": "2025-03-01",
+                        "day": 6,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "date": "2025-03-01",
+                        "day": 6,
+                        "time": "1730"
+                    }
+                }
+            ],
+            "weekday_text": [
+                "\u661f\u671f\u4e00: \u4f11\u606f",
+                "\u661f\u671f\u4e8c: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u4e09: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u56db: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u4e94: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u516d: 11:30 \u2013 15:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u65e5: 11:30 \u2013 15:00, 17:30 \u2013 20:00"
+            ]
+        },
+        "delivery": false,
+        "dine_in": true,
+        "formatted_address": "300\u53f0\u7063\u65b0\u7af9\u5e02\u6771\u5340\u5efa\u4e2d\u8def55\u865f",
+        "formatted_phone_number": "03 574 8478",
+        "geometry": {
+            "location": {
+                "lat": 24.8014133,
+                "lng": 120.9949019
+            },
+            "viewport": {
+                "northeast": {
+                    "lat": 24.8027381302915,
+                    "lng": 120.9962995302915
+                },
+                "southwest": {
+                    "lat": 24.8000401697085,
+                    "lng": 120.9936015697085
+                }
+            }
+        },
+        "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+        "icon_background_color": "#FF9E67",
+        "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+        "international_phone_number": "+886 3 574 8478",
+        "name": "\u559c\u61a8\u5152\u5275\u4f5c\u6599\u7406\u65b0\u7af9\u5efa\u4e2d\u5e97(\u96fb\u8a71\u8a02\u4f4d)",
+        "opening_hours": {
+            "open_now": true,
+            "periods": [
+                {
+                    "close": {
+                        "day": 0,
+                        "time": "1500"
+                    },
+                    "open": {
+                        "day": 0,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 0,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 0,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 2,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "day": 2,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 2,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 2,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 3,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "day": 3,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 3,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 3,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 4,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "day": 4,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 4,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 4,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 5,
+                        "time": "1400"
+                    },
+                    "open": {
+                        "day": 5,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 5,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 5,
+                        "time": "1730"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 6,
+                        "time": "1500"
+                    },
+                    "open": {
+                        "day": 6,
+                        "time": "1130"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 6,
+                        "time": "2000"
+                    },
+                    "open": {
+                        "day": 6,
+                        "time": "1730"
+                    }
+                }
+            ],
+            "weekday_text": [
+                "\u661f\u671f\u4e00: \u4f11\u606f",
+                "\u661f\u671f\u4e8c: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u4e09: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u56db: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u4e94: 11:30 \u2013 14:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u516d: 11:30 \u2013 15:00, 17:30 \u2013 20:00",
+                "\u661f\u671f\u65e5: 11:30 \u2013 15:00, 17:30 \u2013 20:00"
+            ]
+        },
+        "photos": [
+            {
+                "height": 2546,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/114434233383532370595\">\u559c\u61a8\u5152\u5275\u4f5c\u6599\u7406\u65b0\u7af9\u5efa\u4e2d\u5e97(\u96fb\u8a71\u8a02\u4f4d)</a>"
+                ],
+                "photo_reference": "AVzFdbnD2FA6aHdMDgo5zeHIAjgNbauA7AktQGHY_L0SFdPt4_YE52x6GHa9sBVeIJDPMh3Kye8_rJwMplgso6FnURMyGtrYQ6U_LKaqMnSYcWAfSZOIFEQTU75DuA8Z70STK17GUtywWG5WQ8q-6SHRyiDplqMUWRFtyGmBjfrtTjOxz7WDtr9sld0b",
+                "width": 2546
+            },
+            {
+                "height": 3648,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/114434233383532370595\">\u559c\u61a8\u5152\u5275\u4f5c\u6599\u7406\u65b0\u7af9\u5efa\u4e2d\u5e97(\u96fb\u8a71\u8a02\u4f4d)</a>"
+                ],
+                "photo_reference": "AVzFdbnBj62hst_2r6WsqxrZcdsc3r8QhRIIwwc0zTvJ_W-a_GlEM6BhTC7JU8Fer4GzoFyaC_mnDPZBQoCVQeq5nKKSP10W8ck4zIpCenMlrd1tHKTBLWk4oziCZF3mnNP9SwoG70QIGe0jT4ek2HMwLVlGbF8BqecNfXHFMhVeSZyZRu2joqx6NQwP",
+                "width": 5472
+            },
+            {
+                "height": 4284,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/115193134522677712014\">\u8303\u8a60\u5d50</a>"
+                ],
+                "photo_reference": "AVzFdbkJvm2Mu-GWaVCZ1Y7v2vI6beejMqgzbWcOqm9ZuaffaA-o_r0ETyTz0uLEowYQdk_2Cbmi707UqocIZuqtY5sNcJLfluT4gq4P9TtORPcmqL2jD7nhjt5nTVkyGN7hE-z6Nb6TJRFjbou99KEWRH0cLf9v9oShoDL0kLuN_WvT0Hy1vzOal4-h",
+                "width": 5712
+            },
+            {
+                "height": 2268,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/114434233383532370595\">\u559c\u61a8\u5152\u5275\u4f5c\u6599\u7406\u65b0\u7af9\u5efa\u4e2d\u5e97(\u96fb\u8a71\u8a02\u4f4d)</a>"
+                ],
+                "photo_reference": "AVzFdbm-Nx9S6Z1vtgVw65geLM1h2RiwjiUh6Mc53ysS0f0iI7UxQA3-sy14584yNFFo0EXIHV1ZKq22yPWqmx-jl5h00x5ZgDV1fCBGHRvfQwS9scvQl6CSGY0vfD5ycacxx2s1AZOJ0pFUqyFD1bSP1lMO-6wodp-ib7Dp9nO7iKsoyNpOreK7hdzu",
+                "width": 4032
+            },
+            {
+                "height": 1108,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/100333701390298412957\">Hannash Shi</a>"
+                ],
+                "photo_reference": "AVzFdblJd_EQbmmZTWNIeEdt71RH4Puu2uX8kNtrs1c9tTUxaeOsuQ4GYRxHPRzRJsvi2zpbr08U8slA1B1j72Rq2cHKENd6ItMVYvmvFvoI2YaKDKsqpL9Ck22jW51fQzdz1eBuH8fBhp2dZ3sAjonvjpXRZlrRvyUrWIKd39OjcI9aVEq5zDy2fN2V",
+                "width": 1477
+            },
+            {
+                "height": 3000,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/110085169390106199022\">Tomi Lin (\u5077\u7c73)</a>"
+                ],
+                "photo_reference": "AVzFdbktRCGFjkn_CHChuCra1LUVyrj2kaJw1kLhXyCnqn49Bz3QMRhhxZQ4XXm_rWD-7mk8ubc0KNnwkLHsSwqDVav5ZZCaboHKbsQA5LqEbFVa9dqRa5mR6Zjoq30jQZ5vWWwq66cX6r9JKRipVnmgcNAcKYByFcQwcqNrVUphRY0mo5bRLC-mFDqs",
+                "width": 4000
+            },
+            {
+                "height": 4032,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/112271151524336528263\">Shihyuan Chao</a>"
+                ],
+                "photo_reference": "AVzFdbkR_7Cf_NAl0QV0ClszrsIJCKuhy8TT_o7StZm44ns-UGlQ51q6B1ZiTYleLvvUMe0uv41klDsMKWspR2Zq84Q_irH-6J8CZyz2bLBuooUseVNpegOIHobfAJQ6A7hfnR1JoVnjcr2kuXZqqB0fR9CIbusqHQt8ClILFURO2k-SqbYpbYHZAcu5",
+                "width": 3024
+            },
+            {
+                "height": 1591,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/102303866397183180192\">\u5f35\u744b\u5ead</a>"
+                ],
+                "photo_reference": "AVzFdbnzquwtsVb2l6zBMLQKlOCOK_L2qvRXqP--J5DqSgd5hiDVL5udpaG5DNWQBDsO6VgMYIB4mkI5w6FIE3YSTCiqHAoOVvMb07hpsh3dAvn9ybDtSVi1zmtrEHCVjq1yMJedn-Tx5XXf_5cQZDV7AEfsKuD3JTsD61Zq06Uz-Gbef5F0cle8ID0z",
+                "width": 2331
+            },
+            {
+                "height": 3072,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/101294448204212413417\">clark fu</a>"
+                ],
+                "photo_reference": "AVzFdbnpESX_dVA8R_iGmCuUce1k_VEqpwZX--d3oNQWP9UJYcRaB3oGQ2PDMCIDj2ECJHKA8sBzF0oFJ9uJtqd9mOQ7k6FMOZO1KZkO7pAVhR4ITReB1h6bH9nqQJsREgezd11CHvpH8rVJhWry6X18zg0Dw3UATppksKYuFCO7qlCzUESDxAC4jG8B",
+                "width": 4080
+            },
+            {
+                "height": 4624,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/110675084057743616541\">MING GUAN</a>"
+                ],
+                "photo_reference": "AVzFdbn-yE0b6o-6E1nSn9lJj50AbHwc5UBHEG97GpZcRd7lyygT72UfvyFs18fY1_hwrBsoGzwYQjKw9dHgurPVKmdNRS2aikM7RUH5ZbtlJvJhhZfpaDWYGRjhBRysJ26rwogkQ56rcylqORplkyAKmrLQoBjq3tGKak3DnzE2Kf-tfVF3Dkh9itdR",
+                "width": 3472
+            }
+        ],
+        "place_id": "ChIJ91C1wXM2aDQRIXV9sylIRmM",
+        "plus_code": {
+            "compound_code": "RX2V+HX \u53f0\u7063\u65b0\u7af9\u5e02\u6771\u5340\u6b66\u529f\u91cc",
+            "global_code": "7QP2RX2V+HX"
+        },
+        "price_level": 1,
+        "rating": 4.6,
+        "reference": "ChIJ91C1wXM2aDQRIXV9sylIRmM",
+        "reservable": true,
+        "reviews": [
+            {
+                "author_name": "Eunice Li",
+                "author_url": "https://www.google.com/maps/contrib/104286510621384775262/reviews",
+                "language": "zh-Hant",
+                "original_language": "zh-Hant",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjVBISL83CObh5ROf6T1gr1ZSCa9xOi-4JDUCbBpaue70uVkWgvXeg=s128-c0x00000000-cc-rp-mo-ba4",
+                "rating": 5,
+                "relative_time_description": "1 \u500b\u6708\u524d",
+                "text": "\u5403\u5230\u98fd\u5f62\u5f0f\n\u7269\u8d85\u6240\u503c \u597d\u5403 \u4ee5\u9019\u500b\u50f9\u4f4d\u4f86\u8aaaCP\u503c\u5f88\u9ad8\uff01\uff01\n\u670d\u52d9\u54c1\u8cea\u4e5f\u5f88\u597d\n\u5927\u90e8\u5206\u7684\u6771\u897f\u90fd\u662f\u8abf\u5473\u4e0d\u6703\u592a\u91cd\u7684\n\u6574\u9ad4\u5403\u8d77\u4f86\u4e0d\u6703\u6709\u8ca0\u64d4\n\u70e4\u7269\u719f\u5ea6\u6070\u5230\u597d\u8655\n\u96de\u8089\u5f88\u5ae9\u6bd4\u8f03\u559c\u6b61\u525d\u76ae\u8fa3\u6912\u7684\n\u725b\u8089\u5927\u6982\u4e94\u516d\u5206\u719f\u8edf\u5ae9\u5f88\u63a8\n\n\u4e0d\u904e\u6709\u9ede\u53ef\u60dc\u7684\u662f\u96de\u8089\u4e32\u548c\u9b5a\u4e0b\u5df4\u7b49\u70e4\u7269\u7684\u91ac\u6599\u76f8\u540c\uff0c\u5473\u9053\u6703\u5f88\u985e\u4f3c\n\u4e0d\u904e\u70e4\u7269\u672c\u8eab\u8edf\u5ae9\u597d\u5403\uff0c\u9ede\u500b\u4e00\u8f2a\u771f\u7684\u6bd4\u5916\u9762\u71d2\u70e4\u5e97\u4fbf\u5b9c\u592a\u591a\n\n\u9999\u849c\u767d\u8766\u9bae\u751c\u5473\u9053\u7c21\u55ae\u597d\u5403\n\u9999\u83c7\u548c\u674f\u9b91\u83c7\u8edf\u5ae9\u591a\u6c41\n\u9752\u83dc\u662f\u83e0\u83dc\u7092\u9d3b\u79a7\u83c7\u71df\u990a\u8c50\u5bcc\u4e5f\u7092\u5f97\u5f88\u9999\n\u9752\u83dc\u771f\u7684\u662f\u610f\u5916\u7684\u9ed1\u99ac\n\u86e4\u8823\u6e6f\u5473\u9053\u9bae\u7f8e\u86e4\u870a\u4e5f\u5f88\u591a\n\u9019\u5e7e\u9053\u5403\u7684\u6642\u5019\u90fd\u60f3\u8aaa\u5176\u5be6\u883b\u9069\u5408\u5065\u8eab\u7684\u4eba\u4f86\u5403\n\u90fd\u4e0d\u6703\u592a\u6cb9\u592a\u9e79\n\u71df\u990a\u53c8\u5747\u8861\n\n\u70b8\u7269\u5403\u4e86\u53ef\u9e97\u9905\u548c\u5510\u63da\u96de\n\u5510\u63da\u96de\u6bd4\u8f03\u50cf\u96de\u584a\n\u53ef\u9e97\u9905\u8d77\u53f8\u8d85\u591a\u597d\u597d\u5403\u597d\u723d\u4e5f\u5f88\u5927\u4e00\u584a \u63a8\u63a8\n\n\u58fd\u53f8\u4e00\u4e0b\u5b50\u5c31\u5403\u6389\u4e86\u6c92\u62cd\u5230\n\u6700\u559c\u6b61\u7684\u662f\u9d28\u80f8\u7684\u5f88\u539a\u4e00\u7247\u4e5f\u5f88\u5ae9\n\u6750\u6599\u883b\u65b0\u9bae\u7684 \u4e5f\u6709\u9644\u5c71\u8475\u53ef\u4ee5\u81ea\u884c\u4f7f\u7528\n\n\u751c\u9ede\u90e8\u5206\u7d05\u8c46\u6e6f\u6bd4\u8f03\u53ef\u60dc\u6e6f\u6c92\u6709\u71c9\u721b\u9084\u662f\u767d\u767d\u7684\u6c92\u4ec0\u9ebc\u5473\u9053\n\u9905\u4e7e\u597d\u5403\ud83d\ude0b\n\u7384\u9905\u4e00\u822c\u822c\n\n\u91cd\u9ede\u662f\u74b0\u5883\u5f88\u68d2\u3001\u4e7e\u6de8\u660e\u4eae\u885b\u751f\n\u9084\u6709\u9644\u65b0\u7af9\u540d\u5e97814\u5927\u540c\u51b0\u5e97\u7684\u51b0\u68d2\n\u5473\u589e\u6e6f\u3001\u98ef\u3001\u98f2\u6599\uff08\u53ef\u53e3\u53ef\u6a02\uff09\n\u771f\u7684\u8d85\u5212\u7b97\n\u8aaa\u65b0\u7af9\u6c92\u6771\u897f\u5403\u7684\u90fd\u5148\u4f86\u5403\u770b\u770b\u518d\u8aaa\u5566\n\n\u670d\u52d9\u4eba\u54e1\u5f88\u8a8d\u771f\u4e5f\u5f88\u7a4d\u6975\n\u5f88\u4ee4\u4eba\u4f69\u670d\uff01\n\n\u500b\u4eba\u559c\u611b\uff1a\u9999\u83c7\u3001\u674f\u9b91\u83c7\u3001\u8d77\u53f8\u53ef\u9e97\u9905\u3001\u70e4\u725b\u8089\u4e32\u3001\u7092\u9752\u83dc",
+                "time": 1736941780,
+                "translated": false
+            },
+            {
+                "author_name": "\u0623\u0644\u062b\u064a\u0627 \u0634\u0648\u0646",
+                "author_url": "https://www.google.com/maps/contrib/100594950309439558764/reviews",
+                "language": "zh-Hant",
+                "original_language": "zh-Hant",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocKkXaBN11s1iDu08cKyWEHFD6M9VQMAWG7Ww7rb9wJMIz1xJHBo=s128-c0x00000000-cc-rp-mo-ba7",
+                "rating": 5,
+                "relative_time_description": "3 \u500b\u6708\u524d",
+                "text": "\u9910\u5ef3\u74b0\u5883\u8ddf\u6c23\u6c1b\u90fd\u5f88\u597d\uff0c\u5f88\u5b89\u975c\u9069\u5408\u670b\u53cb\u5c0f\u805a\u7528\u9910\uff0c\u9910\u9ede\u90e8\u5206\u9664\u4e86\u7d05\u8c46\u6e6f\u592a\u751c\u5176\u4ed6\u90fd\u5f88\u559c\u6b61\uff0c\u96de\u8089\u4e32\u4e09\u7a2e\u90fd\u8d85\u7d1a\u597d\u5403\u8d85\u7d1a\u5ae9\uff0c\u8abf\u5473\u4e5f\u5f88\u525b\u597d\uff0c\u725b\u8089\u4e32\u5f88\u7279\u5225\u662f\u725b\u808b\u689d\uff0c\u6ef7\u904e\u4e4b\u5f8c\u518d\u70e4\u904e\u624d\u4e0a\u684c\uff0c\u674f\u9b91\u83c7\u548c\u9999\u83c7\u4f3c\u4e4e\u70b8\u904e\u624d\u70e4\uff0c\u624b\u5377\u985e\u90fd\u5f88\u597d\u5403\u9ede\u4e86\u5f88\u591a\u6b21\uff0c\u70b8\u8766\u624b\u5377\u5f88\u9165\uff0c\u8766\u5b50\u4e0d\u6703\u5c0f\u96bb\uff0c\u642d\u914d\u9069\u91cf\u7684\u7f8e\u4e43\u6ecb\u548c\u82dc\u84ff\u82bd\u3002\u7092\u9752\u83dc\u7684\u9752\u83dc\u5f88\u5ae9\u4e0d\u6703\u8001\uff0c\u96d6\u7136\u770b\u8d77\u4f86\u4e0b\u4e86\u5f88\u591a\u849c\u982d\u537b\u4e0d\u6703\u6709\u5f88\u55c6\u7684\u849c\u5473\u3002\u9910\u9ede\u53ef\u4ee5\u9ede\u7684\u54c1\u9805\u5f88\u591a\uff0c\u4efd\u91cf\u4e5f\u90fd\u883b\u8db3\u5920\u7684\uff0c\u60f3\u5403\u9e79\u7684\u3001\u751c\u7684\u3001\u51b7\u7684\u3001\u71b1\u7684\u90fd\u6709\uff0c\u670d\u52d9\u4eba\u54e1\u90fd\u5f88\u89aa\u5207\uff0c\u9910\u6aaf\u9084\u6709\u63d0\u4f9b\u81ea\u53d6\u7684\u6fc3\u6e6f\uff0c\u5473\u9053\u9999\u6fc3\uff0c\u7f50\u88dd\u7684\u98f2\u6599\u548c\u51b0\u68d2\u90fd\u53ef\u4ee5\u81ea\u5df1\u62ff\uff0c\u6574\u9ad4\u7528\u9910\u975e\u5e38\u6109\u5feb\uff0c\u975e\u5e38\u63a8\u85a6\u4f86\u7528\u9910\u2728\ufe0f\n\u5c0f\u5c0f\u7f3a\u9ede\u662f\u6709\u9ede\u4e86\u4e00\u500b\u86e4\u870a\u6e6f\uff0c\u8a62\u554f\u5169\u6b21\u90fd\u6c92\u6709\u4f86\uff0c\u6c92\u5403\u5230\u6709\u9ede\u53ef\u60dc\u3002",
+                "time": 1730612332,
+                "translated": false
+            },
+            {
+                "author_name": "Kang Hung-Sheng",
+                "author_url": "https://www.google.com/maps/contrib/101394989556974597948/reviews",
+                "language": "zh-Hant",
+                "original_language": "zh-Hant",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjV2W9C-7N3iW6m2r9HDUbfApjweJDbXq4jQNMPSKlOefI6widWA=s128-c0x00000000-cc-rp-mo-ba3",
+                "rating": 5,
+                "relative_time_description": "\u672c\u9031",
+                "text": "\u9910\u5ef3\u5f88\u4e7e\u6de8\u3001\u98df\u7269\u5f88\u65b0\u9bae\u5f88\u597d\u5403\uff0c\u800c\u4e14\u662f\u5403\u5230\u98fd\uff0c\u5f88\u5212\u7b97\uff0c\u81ea\u52a9\u58e9\u3001\u6e6f\u3001\u51b7\u98df\u3001\u58fd\u53f8\u3001\u70b8\u7269\u3001\u9eb5\u98df\u96de\u8089\u4e32\u3001\u852c\u83dc\u8abf\u5473\u90fd\u597d\u5403\u3002\u552f\u7368\u725b\u8089\u4e32\u6709\u9ede\u53ef\u60dc\uff0c\u6709\u8abf\u5473\u7684\u8a71\u6703\u66f4\u9999\uff0c\u66f4\u597d\u5403\uff01",
+                "time": 1739703237,
+                "translated": false
+            },
+            {
+                "author_name": "clark fu",
+                "author_url": "https://www.google.com/maps/contrib/101294448204212413417/reviews",
+                "language": "zh-Hant",
+                "original_language": "zh-Hant",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a/ACg8ocIH1hVfZzyz7a_0x91dDl0ig-pWvOLOIiHEK9qUKUR99B9Fow=s128-c0x00000000-cc-rp-mo-ba5",
+                "rating": 5,
+                "relative_time_description": "5 \u500b\u6708\u524d",
+                "text": "\u7b2c\u4e00\u6b21\u5230\u6b64\u7528\u9910\uff0c\u6574\u9ad4\u4f86\u8aaa\u611f\u89ba\u9084\u4e0d\u932f\u3002\u670d\u52d9\u4eba\u54e1\u5f88\u5ba2\u6c23\uff0c\u4f46\u7565\u5acc\u7dca\u5f35\uff0c\u5927\u5bb6\u4f86\u7528\u9910\u6642\u6709\u9700\u6c42\u53ef\u4ee5\u76e1\u91cf\u548c\u7de9\u7684\u63d0\u51fa\u6240\u9700\u7684\u5e6b\u5fd9\u3002\n\u9910\u9ede\u63a8\u85a6\uff0c\u6c34\u716e\u8766\uff0c\u849c\u84c9\u8766\uff0c\u70e4\u9b5a\u4e0b\u5df4\uff0c\u70e4\u8089\u4e32\uff0c\u70e4\u9999\u83c7/\u674f\u9b91\u83c7/\u751c\u4e0d\u8fa3\u3002\u624b\u6372\u4e5f\u975e\u5e38\u7684\u63a8\u85a6...\u6709\u4e00\u934b\u4e0d\u77e5\u540d\u7684\u708a\u98ef\u548c\u725b\u8089\u4e3c\uff0c\u5c0f\u670b\u53cb\u8aaa\u975e\u5e38\u597d\u5403\u3002\n\u53e6\u5916\u67093\u52304\u7a2e\u98f2\u6599\u548c8\u7a2e\u50b3\u7d71\u53e3\u5473\u7684(814\u5927\u540c)\u51b0\u68d2\u53ef\u4eab\u7528\u3002\u767d\u7389\u7d05\u8c46\u6e6f\uff0c\u6e6f\u5713Q\u5f48\uff0c\u4f46\u7d05\u8c46\u82e5\u80fd\u518d\u716e\u8edf\u721b\u4e00\u9ede\uff0c\u53e3\u5473\u6703\u66f4\u4f73\u3002\u7522\u5f8c\u7684\u767e\u9999\u679c\uff0c\u679c\u8089\u98fd\u6eff\u9999\u751c\uff0c\u8b9a\u5566~~~\n\u5efa\u8b70\u63d0\u4f9b\u81ea\u5df1\u70d8\u7119\u7684\u9eb5\u5305\u4f9b\u7528\u9910\u5ba2\u4eba\u4eab\u7528\uff0c\u82e5\u7b26\u5408\u5ba2\u4eba\u53e3\u5473\uff0c\u4e5f\u53ef\u63d0\u5347\u5916\u5e36\u9eb5\u5305\u7684\u5546\u6a5f\u3002",
+                "time": 1727103901,
+                "translated": false
+            },
+            {
+                "author_name": "Giselle W",
+                "author_url": "https://www.google.com/maps/contrib/118085668998798578676/reviews",
+                "language": "zh-Hant",
+                "original_language": "zh-Hant",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a-/ALV-UjUcyEkH-bpWA-NosmRXOQq_la5Ma5RsvP02T9RBNviLiLMcSDEb=s128-c0x00000000-cc-rp-mo-ba5",
+                "rating": 5,
+                "relative_time_description": "3 \u500b\u6708\u524d",
+                "text": "\u6771\u897f\u90fd\u7b97\u7f8e\u5473\uff0c\u96fb\u934b\u7684\u96dc\u708a\u8ddf\u99ac\u9234\u85af\u6fc3\u6e6f\u90fd\u975e\u5e38\u6709\u8aa0\u610f\uff0c\u65e5\u5f0f\u7092\u9eb5\u662f\u60f3\u50cf\u4e2d\u7684\u751c\uff0c\u6574\u9ad4\u7528\u9910\u6c23\u6c1b\u4e00\u7247\u7965\u548c\uff0c\u5e97\u88e1\u7684\u5f1f\u5f1f\u5f88\u53ef\u611b\uff0c\u773c\u795e\u6e05\u6f88\uff08\u6234\u8457\u53e3\u7f69\u6211\u4e5f\u53ea\u80fd\u770b\u5230\u773c\u775b\uff09\uff0c\u5982\u679c\u4eba\u6578\u8a31\u53ef\uff0c\u5efa\u8b70\u9760\u8d70\u9053\u7684\u7a7a\u4f4d\u7559\u51fa\u4f86\u7d66\u5f1f\u5f1f\u4e0a\u83dc\u5594\uff0c\u6211\u5011\u4e00\u958b\u59cb\u5750\u9760\u8d70\u9053\u80fd\u611f\u89ba\u5230\u4ed6\u5011\u4e0a\u83dc\u5f88\u56f0\u64fe\uff0c\u5076\u723e\u6703\u6f0f\u55ae\u4f46\u7121\u50b7\u5927\u96c5\uff0c\u60f3\u5403\u5c31\u518d\u756b\u4e00\u6b21\u55ae\u56c9\uff0c\u5047\u65e5\u5169\u4eba\u542b\u670d\u52d9\u8cbb\u662f1216\uff0c\u6c92\u8a02\u4f4d\u5efa\u8b7011\u9ede\u534a\u4f86\uff0c\u662f\u6709\u6a5f\u6703\u5403\u5230\u7684",
+                "time": 1731216887,
+                "translated": false
+            }
+        ],
+        "secondary_opening_hours": [
+            {
+                "open_now": false,
+                "periods": [
+                    {
+                        "close": {
+                            "date": "2025-02-23",
+                            "day": 0,
+                            "time": "1500"
+                        },
+                        "open": {
+                            "date": "2025-02-23",
+                            "day": 0,
+                            "time": "1130"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-25",
+                            "day": 2,
+                            "time": "1400"
+                        },
+                        "open": {
+                            "date": "2025-02-25",
+                            "day": 2,
+                            "time": "1130"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-26",
+                            "day": 3,
+                            "time": "1400"
+                        },
+                        "open": {
+                            "date": "2025-02-26",
+                            "day": 3,
+                            "time": "1130"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-27",
+                            "day": 4,
+                            "time": "1400"
+                        },
+                        "open": {
+                            "date": "2025-02-27",
+                            "day": 4,
+                            "time": "1130"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-28",
+                            "day": 5,
+                            "time": "1400"
+                        },
+                        "open": {
+                            "date": "2025-02-28",
+                            "day": 5,
+                            "time": "1130"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-03-01",
+                            "day": 6,
+                            "time": "1500"
+                        },
+                        "open": {
+                            "date": "2025-03-01",
+                            "day": 6,
+                            "time": "1130"
+                        }
+                    }
+                ],
+                "type": "LUNCH",
+                "weekday_text": [
+                    "\u661f\u671f\u4e00: \u4f11\u606f",
+                    "\u661f\u671f\u4e8c: 11:30 \u2013 14:00",
+                    "\u661f\u671f\u4e09: 11:30 \u2013 14:00",
+                    "\u661f\u671f\u56db: 11:30 \u2013 14:00",
+                    "\u661f\u671f\u4e94: 11:30 \u2013 14:00",
+                    "\u661f\u671f\u516d: 11:30 \u2013 15:00",
+                    "\u661f\u671f\u65e5: 11:30 \u2013 15:00"
+                ]
+            },
+            {
+                "open_now": true,
+                "periods": [
+                    {
+                        "close": {
+                            "date": "2025-02-23",
+                            "day": 0,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-02-23",
+                            "day": 0,
+                            "time": "1730"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-25",
+                            "day": 2,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-02-25",
+                            "day": 2,
+                            "time": "1730"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-26",
+                            "day": 3,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-02-26",
+                            "day": 3,
+                            "time": "1730"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-27",
+                            "day": 4,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-02-27",
+                            "day": 4,
+                            "time": "1730"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-02-28",
+                            "day": 5,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-02-28",
+                            "day": 5,
+                            "time": "1730"
+                        }
+                    },
+                    {
+                        "close": {
+                            "date": "2025-03-01",
+                            "day": 6,
+                            "time": "2000"
+                        },
+                        "open": {
+                            "date": "2025-03-01",
+                            "day": 6,
+                            "time": "1730"
+                        }
+                    }
+                ],
+                "type": "DINNER",
+                "weekday_text": [
+                    "\u661f\u671f\u4e00: \u4f11\u606f",
+                    "\u661f\u671f\u4e8c: 17:30 \u2013 20:00",
+                    "\u661f\u671f\u4e09: 17:30 \u2013 20:00",
+                    "\u661f\u671f\u56db: 17:30 \u2013 20:00",
+                    "\u661f\u671f\u4e94: 17:30 \u2013 20:00",
+                    "\u661f\u671f\u516d: 17:30 \u2013 20:00",
+                    "\u661f\u671f\u65e5: 17:30 \u2013 20:00"
+                ]
+            }
+        ],
+        "serves_beer": false,
+        "serves_breakfast": false,
+        "serves_brunch": false,
+        "serves_dinner": true,
+        "serves_lunch": true,
+        "serves_wine": false,
+        "types": [
+            "bakery",
+            "store",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "url": "https://maps.google.com/?cid=7153484402066814241",
+        "user_ratings_total": 1040,
+        "utc_offset": 480,
+        "vicinity": "\u6771\u5340\u5efa\u4e2d\u8def55\u865f",
+        "website": "https://www.facebook.com/SEFUNHC2/",
+        "wheelchair_accessible_entrance": true
+    },
+    "status": "OK"
+}
