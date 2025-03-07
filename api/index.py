@@ -105,9 +105,5 @@ def handling_location_message(event):
         latitude = event.message.latitude
         longitude = event.message.longitude
         result = what_to_eat(latitude, longitude)
-        with open("test.json", "w") as filep:
-            import json
-
-            json.dump(result, filep, indent=4)
         flex_message = FlexSendMessage("cards", result)
         line_bot_api.reply_message(reply_token=replyToken, messages=flex_message)
