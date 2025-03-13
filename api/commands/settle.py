@@ -1,102 +1,124 @@
-from __future__ import annotations
-
 import re
-import typing
+import textwrap
+from enum import Enum
 
-from api.commands.base import Command
 from api.utils.configs import LANGUAGE
 
 
-class SettleCommand(Command):
-    usage_en = """* Settle the money transaction
-@LineGPT settle
-<chart>
+class MessageEN(str, Enum):
+    HEADER = "Here is the result:"
 
-Example:
-@LineGPT settle
-Iron man: 100
-Batman: 300
-Superman: 240
-Spiderman: 0
 
-Here is the result:
-Spiderman -> Batman 140.0
-Iron man -> Superman 60.0
-Spiderman -> Superman 20.0
-"""
+class MessageZHTW(str, Enum):
+    HEADER = "以下是分帳結果:"
 
-    usage_zh_TW = """* 多人分帳
-@LineGPT settle
-<chart>
 
-Example:
-@LineGPT settle
-大壯: 100
-小帥: 300
-小美: 240
-大黑: 0
+MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
 
-以下是分帳結果：
-大黑 -> 小帥 140.0
-大壯 -> 小美 60.0
-大黑 -> 小美 20.0
-"""
 
-    def __init__(
-        self, subcommand: typing.Optional[str] = None, args: typing.Optional[str] = None
-    ) -> None:
-        args = args.replace("：", ":")  # Replace chinese full colon
-        super().__init__(subcommand, args)
-        self.expenses = {}
+def parse_expense(expense_chart: str) -> dict:
+    expenses = {}
 
-    @classmethod
-    def setup(cls, args_msg: str) -> SettleCommand:
-        args = args_msg.lstrip()
-        return cls(None, args)
+    pattern = re.compile(r"(.+):\s*(\d+)")
+    for line in expense_chart.splitlines():
+        if mrx := pattern.search(line):
+            expenses[mrx.group(1)] = int(mrx.group(2))
 
-    def execute(self, **kwargs):
-        self.parse_expense()
-        transactions = self.settle_money()
-        heading = "Here is the result:\n" if LANGUAGE == "en" else "以下是分帳結果：\n"
+    return expenses
 
-        return heading + "\n".join(
-            [
-                f"{transaction[0]} -> {transaction[1]} {round(transaction[2],1)}"
-                for transaction in transactions
-            ]
-        )
 
-    def parse_expense(self):
-        pattern = re.compile(r"(.+): *(\d+)")
-        for line in self.args.split("\n"):
-            if mrx := pattern.search(line):
-                self.expenses[mrx.group(1)] = int(mrx.group(2))
+def settle_money(expenses: dict):
+    """Settle money
 
-    def settle_money(self):
+    Calculates the amount each person owes or is owed after settling expenses.
+
+    Args:
+        expenses (dict): A dictionary of the form representing the expenses paid by each person.
+            key: person
+            value: paid money
+
+    Returns:
+        transactions (list(tuple)): A list of tuples representing the money transactions
+            needed to settle the expenses. The meaning of each element will be
+
+                        {ele[0]} need to give {ele[1]} {ele[2]} money
+    """
+    total_expenses = sum(expenses.values())
+    num_people = len(expenses)
+    average_expense = total_expenses / num_people
+    owed = {
+        person: amount_paid - average_expense
+        for person, amount_paid in expenses.items()
+    }
+
+    transactions = []
+    while any(map(lambda x: x > 1, owed.values())):
+        person1, amount1 = max(owed.items(), key=lambda x: x[1])
+        person2, amount2 = min(owed.items(), key=lambda x: x[1])
+        amount = min(-amount2, amount1)
+        transactions.append((person2, person1, amount))
+        owed[person1] -= amount
+        owed[person2] += amount
+
+    return transactions
+
+
+def print_help():
+    usage_en = textwrap.dedent(
         """
-        Calculates the amount each person owes or is owed after settling expenses.
+            * Settle the money transaction
+            @LineGPT settle
+            <chart>
 
-        Arguments:
-        expenses -- a dictionary of the form {person: amount_paid} representing the expenses paid by each person
+            Example:
+            @LineGPT settle
+            Iron man: 100
+            Batman: 300
+            Superman: 240
+            Spiderman: 0
 
-        Returns:
-        A list of tuples representing the money transactions needed to settle the expenses.
+            Here is the result:
+            Spiderman -> Batman 140.0
+            Iron man -> Superman 60.0
+            Spiderman -> Superman 20.0
+            """
+    )
+
+    usage_zh_TW = textwrap.dedent(
         """
-        total_expenses = sum(self.expenses.values())
-        num_people = len(self.expenses)
-        average_expense = total_expenses / num_people
-        owed = {
-            person: amount_paid - average_expense
-            for person, amount_paid in self.expenses.items()
-        }
+                * 多人分帳
+                @LineGPT settle
+                <chart>
 
-        transactions = []
-        while any(map(lambda x: x > 1, owed.values())):
-            person1, amount1 = max(owed.items(), key=lambda x: x[1])
-            person2, amount2 = min(owed.items(), key=lambda x: x[1])
-            amount = min(-amount2, amount1)
-            transactions.append((person2, person1, amount))
-            owed[person1] -= amount
-            owed[person2] += amount
+                Example:
+                @LineGPT settle
+                大壯: 100
+                小帥: 300
+                小美: 240
+                大黑: 0
 
-        return transactions
+                以下是分帳結果：
+                大黑 -> 小帥 140.0
+                大壯 -> 小美 60.0
+                大黑 -> 小美 20.0
+                """
+    )
+    if LANGUAGE == "zh_TW":
+        return usage_zh_TW
+    return usage_en
+
+
+def handle_message(message: str) -> str:
+    if "help" in message:
+        return print_help()
+
+    chart = message.replace("：", ":")  # Replace chinese full colon
+    expenses = parse_expense(chart)
+    transactions = settle_money(expenses)
+
+    return MESSAGE.HEADER.value + "\n".join(
+        [
+            f"{transaction[0]} -> {transaction[1]} {round(transaction[2],1)}"
+            for transaction in transactions
+        ]
+    )
