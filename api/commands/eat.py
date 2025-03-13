@@ -39,7 +39,7 @@ class MessageZHTW(str, Enum):
     NO_RESULT = "找不到結果"
 
 
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
+MESSAGE = MessageZHTW if LANGUAGE == "zh_TW" else MessageEN
 
 
 def get_food(latitude: str, longitude: str) -> list[dict]:

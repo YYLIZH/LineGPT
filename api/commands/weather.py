@@ -25,7 +25,7 @@ REPORT: Template = Template(
 )
 
 
-class MessageEN(Enum):
+class MessageEN(str, Enum):
     WEATHER_HEADING = "Weather forecast in 36 hours:"
     UNAVAILABLE_LOCATION = "Unavailable location"
     GET_DATA_FAILED = "Failed to get data"
@@ -37,7 +37,7 @@ class MessageEN(Enum):
     REMIND_UMBRELLA = "It may rain today. Bring an umbrella with you."
 
 
-class MessageZHTW(Enum):
+class MessageZHTW(str, Enum):
     WEATHER_HEADING = "未來36小時天氣預報:"
     UNAVAILABLE_LOCATION = "該地區不適用"
     GET_DATA_FAILED = "獲取資料失敗"
@@ -47,7 +47,7 @@ class MessageZHTW(Enum):
     REMIND_UMBRELLA = "今天可能會下雨，出門記得帶傘"
 
 
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
+MESSAGE = MessageZHTW if LANGUAGE == "zh_TW" else MessageEN
 
 LOCATIONS = [
     "宜蘭縣",

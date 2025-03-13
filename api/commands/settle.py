@@ -13,7 +13,7 @@ class MessageZHTW(str, Enum):
     HEADER = "以下是分帳結果:"
 
 
-MESSAGE = MessageEN if LANGUAGE == "en" else MessageZHTW
+MESSAGE = MessageZHTW if LANGUAGE == "zh_TW" else MessageEN
 
 
 def parse_expense(expense_chart: str) -> dict:
