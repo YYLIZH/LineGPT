@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import math
 import textwrap
 from datetime import datetime, timedelta
@@ -7,8 +5,28 @@ from enum import Enum
 
 import requests
 
-from api.commands.base import Command
 from api.utils.configs import GOOGLE_API_KEY, LANGUAGE
+
+
+class GoogleMapSession:
+    timeout = 5
+
+    def __init__(self):
+        self.last_update_time = datetime.now() - timedelta(days=1)
+
+    def update_time(self):
+        self.last_update_time = datetime.now()
+
+    def is_expired(self) -> bool:
+        expired_time = self.last_update_time + timedelta(
+            minutes=self.timeout
+        )
+        if datetime.now() > expired_time:
+            return True
+        return False
+
+
+GOOGLE_MAP_SESSION = GoogleMapSession()
 
 
 class MessageEN(str, Enum):
@@ -39,24 +57,31 @@ def get_food(latitude: str, longitude: str) -> list[dict]:
     if LANGUAGE == "zh_TW":
         query_opts.append("language=zh-TW")
 
-    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "&".join(
-        query_opts
+    url = (
+        f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?"
+        + "&".join(query_opts)
     )
 
     try:
         response = requests.get(url)
         data = response.json()
-        return sorted(data["results"], key=lambda x: x["rating"], reverse=True)[:10]
+        return sorted(
+            data["results"], key=lambda x: x["rating"], reverse=True
+        )[:10]
     except Exception:
         return []
 
 
-def create_map_link(latitude: str, longitude: str, place_id: str) -> str:
+def create_map_link(
+    latitude: str, longitude: str, place_id: str
+) -> str:
     map_link = f"https://www.google.com/maps/search/?api=1&query={latitude}%2C{longitude}&query_place_id={place_id}"
     return map_link
 
 
-def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> str:
+def calculate_distance(
+    lat1: float, lon1: float, lat2: float, lon2: float
+) -> str:
     """Use Haversine Formula"""
     # 地球半徑（公里）
     R = 6371.0
@@ -74,7 +99,9 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> st
     # 哈弗辛公式
     a = (
         math.sin(dlat / 2) ** 2
-        + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+        + math.cos(lat1_rad)
+        * math.cos(lat2_rad)
+        * math.sin(dlon / 2) ** 2
     )
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
@@ -87,7 +114,9 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> st
     return f"{round(distance*1000,2)} m"
 
 
-def get_place_detail(user_lat: str, user_lng: str, place_info: dict) -> dict[str, str]:
+def get_place_detail(
+    user_lat: str, user_lng: str, place_info: dict
+) -> dict[str, str]:
     name = str(place_info.get("name", ""))
     rating = place_info.get("rating", 0.0)
     user_ratings_total = place_info.get("user_ratings_total", 0)
@@ -104,7 +133,9 @@ def get_place_detail(user_lat: str, user_lng: str, place_info: dict) -> dict[str
         ),
         "rating": rating,
         "user_ratings_total": user_ratings_total,
-        "map_url": create_map_link(latitude, longitude, place_info["place_id"]),
+        "map_url": create_map_link(
+            latitude, longitude, place_info["place_id"]
+        ),
     }
 
 
@@ -246,7 +277,9 @@ def generate_flex_message(place_details: list[dict]) -> dict:
     }
 
     for detail in place_details:
-        flex_message_template["contents"].append(generate_card(**detail))
+        flex_message_template["contents"].append(
+            generate_card(**detail)
+        )
 
     return flex_message_template
 
@@ -259,7 +292,9 @@ def what_to_eat(latitude: str, longitude: str) -> dict:
     # Format the text
     place_details = []
     for restaurant in restaurants:
-        place_detail = get_place_detail(latitude, longitude, restaurant)
+        place_detail = get_place_detail(
+            latitude, longitude, restaurant
+        )
         place_details.append(place_detail)
 
     flex_message_dict = generate_flex_message(place_details)
@@ -267,23 +302,7 @@ def what_to_eat(latitude: str, longitude: str) -> dict:
     return flex_message_dict
 
 
-class GoogleMapSession:
-    timeout = 5
-
-    def __init__(self):
-        self.last_update_time = datetime.now() - timedelta(days=1)
-
-    def update_time(self):
-        self.last_update_time = datetime.now()
-
-    def is_expired(self) -> bool:
-        expired_time = self.last_update_time + timedelta(minutes=self.timeout)
-        if datetime.now() > expired_time:
-            return True
-        return False
-
-
-class EatCommand(Command):
+def print_help() -> str:
     usage_en = textwrap.dedent(
         """
         * Find opening restaurant nearby.
@@ -302,16 +321,14 @@ class EatCommand(Command):
         """
     )
 
-    def __init__(self, subcommand=None, args=None):
-        super().__init__(subcommand, args)
-        self.google_map_session = None
+    if LANGUAGE == "zh_TW":
+        return usage_zh_TW
+    return usage_en
 
-    @classmethod
-    def setup(cls, args_msg: str) -> EatCommand:
-        return cls(None, args_msg)
 
-    def load(self, google_map_session: GoogleMapSession):
-        self.google_map_session = google_map_session
+def handle_message(message: str) -> str:
+    if "help" in message:
+        return print_help()
 
-    def execute(self, **kwargs):
-        return MESSAGE.REPLY.value
+    GOOGLE_MAP_SESSION.update_time()
+    return MESSAGE.REPLY.value
