@@ -23,19 +23,21 @@ def _parse_necessary(key: str) -> str:
 
 
 @cache
-def parse_language() -> str:
+def parse_language() -> typing.Literal["en", "zh_TW"]:
     available_lang = ["en", "zh_TW"]
 
     lang = environ.get("LANGUAGE")
     if lang not in available_lang:
-        return "zh_TW"
+        return "en"
     return lang
 
 
 @cache
 def parse_line() -> typing.Tuple[str, str]:
     channel_secret = _parse_necessary("LINE_CHANNEL_SECRET")
-    channel_access_token = _parse_necessary("LINE_CHANNEL_ACCESS_TOKEN")
+    channel_access_token = _parse_necessary(
+        "LINE_CHANNEL_ACCESS_TOKEN"
+    )
     return channel_secret, channel_access_token
 
 

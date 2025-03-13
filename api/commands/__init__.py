@@ -8,7 +8,9 @@ CommandInfo = namedtuple(
     "module_path, class_name, summary_en, summary_zh_TW",
 )
 commands_info: Dict[str, CommandInfo] = {
-    "gpt": CommandInfo("api.commands.gpt", "GptCommand", "GPT commands", "GPT 指令"),
+    "gpt": CommandInfo(
+        "api.commands.gpt", "GptCommand", "GPT commands", "GPT 指令"
+    ),
     "weather": CommandInfo(
         "api.commands.weather",
         "WeatherCommand",
