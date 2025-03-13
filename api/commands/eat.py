@@ -320,7 +320,6 @@ def print_help() -> str:
         @LineGPT eat
         """
     )
-
     if LANGUAGE == "zh_TW":
         return usage_zh_TW
     return usage_en
