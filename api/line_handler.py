@@ -20,7 +20,7 @@ line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 
 def handle_message(message: str) -> str:
-    mrx = re.search(r"^@LineGPT\s+(\w+)\s+.*", message)
+    mrx = re.search(r"^@LineGPT\s+(\w+)\s*.*", message)
     if mrx is None:
         return print_usage()
 

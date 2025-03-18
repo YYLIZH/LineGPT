@@ -1,6 +1,5 @@
 from collections import namedtuple
 from typing import Dict
-
 from api.utils.configs import LANGUAGE
 
 CommandInfo = namedtuple(
