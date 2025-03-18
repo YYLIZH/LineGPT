@@ -1,4 +1,36 @@
-from api.commands.settle import SettleCommand
+import textwrap
+
+from api.commands import settle
+
+USER_MSG = textwrap.dedent(
+    """
+    settle
+    Iron man: 100
+    Batman:  300
+    Superman: 240
+    Spiderman:  0
+    """
+)
+
+
+def test_parse_expense():
+    assert settle.parse_expense(USER_MSG) == {
+        "Iron man": 100,
+        "Batman": 300,
+        "Superman": 240,
+        "Spiderman": 0,
+    }
+
+
+def test_settle_money():
+    expense = {
+        "Iron man": 100,
+        "Batman": 300,
+        "Superman": 240,
+        "Spiderman": 0,
+    }
+
+    assert settle.settle_money(expense) == []
 
 
 def test_settle_command():

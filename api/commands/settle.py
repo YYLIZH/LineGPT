@@ -27,7 +27,7 @@ def parse_expense(expense_chart: str) -> dict:
     return expenses
 
 
-def settle_money(expenses: dict):
+def settle_money(expenses: dict) -> list[tuple[str, str, float]]:
     """Settle money
 
     Calculates the amount each person owes or is owed after settling expenses.
@@ -86,18 +86,18 @@ def print_help():
 
     usage_zh_TW = textwrap.dedent(
         """
-                * 多人分帳
-                @LineGPT settle
-                <chart>
+        * 多人分帳
+        @LineGPT settle
+        <chart>
 
-                Example:
-                @LineGPT settle
-                大壯: 100
-                小帥: 300
-                小美: 240
-                大黑: 0
+        Example:
+        @LineGPT settle
+        大壯: 100
+        小帥: 300
+        小美: 240
+        大黑: 0
 
-                以下是分帳結果：
+        以下是分帳結果：
                 大黑 -> 小帥 140.0
                 大壯 -> 小美 60.0
                 大黑 -> 小美 20.0

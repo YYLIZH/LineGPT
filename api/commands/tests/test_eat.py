@@ -86,13 +86,19 @@ class TestGoogleMapSession:
         session.update_time()
         assert session.is_expired() is False
 
+
 def test_print_help(snapshot):
-    help_message=eat.print_help()
-    assert snapshot==help_message
+    help_message = eat.print_help()
+    assert snapshot == help_message
+
 
 def test_handle_message_eat():
-    msg=eat.handle_message("eat")
-    assert msg==eat.MESSAGE.REPLY.value
+    msg = eat.handle_message("eat")
+    assert msg == eat.MESSAGE.REPLY.value
 
-    msg=eat.handle_message("eat help")
-    assert msg==eat.print_help()
+    msg = eat.handle_message("eat help")
+    assert msg == eat.print_help()
+
+    assert eat.handle_message("eat help aaa") == eat.handle_message(
+        "eat aaa help"
+    )
