@@ -1,7 +1,6 @@
-import datetime
 import re
 import textwrap
-import traceback
+from datetime import datetime, timedelta
 from enum import Enum
 
 import g4f
@@ -71,14 +70,12 @@ class DialogueSession:
         ]
 
         self.client = g4f.client.Client()
-        self.last_update_time = datetime.datetime.now()
+        self.last_update_time = datetime.now()
 
     @property
     def is_expired(self) -> bool:
-        time_delta: datetime.timedelta = (
-            datetime.datetime.now() - self.last_update_time
-        )
-        if time_delta.seconds >= int(SESSION_EXPIRED):
+        time_delta: timedelta = datetime.now() - self.last_update_time
+        if time_delta.total_seconds() >= int(SESSION_EXPIRED):
             return True
         return False
 
@@ -90,7 +87,7 @@ class DialogueSession:
         try:
             raw_response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
-                messages=self.dialogue_session.dialogue,
+                messages=self.dialogue,
             )
         except Exception:
             self.dialogue.pop()
@@ -102,41 +99,11 @@ class DialogueSession:
 
     def _add_ai_text(self, text: str) -> None:
         self.dialogue.append({"role": "assistant", "content": text})
-        self.last_update_time = datetime.datetime.now()
+        self.last_update_time = datetime.now()
 
     def _add_human_text(self, text: str) -> None:
         self.dialogue.append({"role": "user", "content": text})
-        self.last_update_time = datetime.datetime.now()
-
-
-class GPT:
-    def __init__(self) -> None:
-        self.dialogue_session = DialogueSession()
-
-    def _talk(self):
-        client = g4f.client.Client()
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=self.dialogue_session.dialogue,
-        )
-        text = response.choices[0].message.content.strip()
-        self.dialogue_session.add_ai_text(text)
-        return text
-
-    def talk(self, text):
-        if self.dialogue_session is None:
-            return Warning(MESSAGE.NO_SESSION.value)
-        if self.dialogue_session.is_expired():
-            return Warning(MESSAGE.SESSION_EXPIRED.value)
-
-        self.dialogue_session.add_human_text(text)
-        try:
-            response = self._talk()
-        except Exception:
-            print(traceback.format_exc())
-            self.dialogue_session.dialogue.pop()
-            return Error(MESSAGE.RUNTIME_ERROR.value)
-        return response
+        self.last_update_time = datetime.now()
 
 
 class GPT:
