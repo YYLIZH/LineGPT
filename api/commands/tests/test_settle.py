@@ -48,9 +48,11 @@ def test_settle_money():
         ),
     ]
 
+
 def test_handle_message_help():
-    message="settle help"
-    assert settle.handle_message(message)==settle.print_help()
+    message = "settle help"
+    assert settle.handle_message(message) == settle.print_help()
+
 
 def test_handle_message():
     message = textwrap.dedent(
@@ -62,7 +64,7 @@ def test_handle_message():
         Spiderman:  0
         """
     )
-    result=settle.handle_message(message)
+    result = settle.handle_message(message)
     assert result == "\n".join(
         [
             "以下是分帳結果:",
@@ -74,7 +76,8 @@ def test_handle_message():
 
 
 def test_settle_command_full_colon():
-    message = textwrap.dedent("""
+    message = textwrap.dedent(
+        """
     settle
     Iron man: 100
     Batman：  300
@@ -94,7 +97,8 @@ def test_settle_command_full_colon():
 
 
 def test_settle_command_cannot_full_divide():
-    message = textwrap.dedent("""
+    message = textwrap.dedent(
+        """
     settle
     Iron man: 100
     Batman：  300

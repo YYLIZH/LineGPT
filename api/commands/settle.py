@@ -109,16 +109,19 @@ def print_help():
 
 
 def handle_message(message: str) -> str:
-    if "help" in message.splitlines()[0]:
+    lines=message.splitlines()
+    if len(lines)==1:
+        return print_help()
+    if "help" in lines[0]:
         return print_help()
 
     chart = message.replace("：", ":")  # Replace chinese full colon
     expenses = parse_expense(chart)
     transactions = settle_money(expenses)
 
-    output=[MESSAGE.HEADER.value]+[
-            f"{transaction[0]} -> {transaction[1]} {round(transaction[2],1)}"
-            for transaction in transactions
-        ]
+    output = [MESSAGE.HEADER.value] + [
+        f"{transaction[0]} -> {transaction[1]} {round(transaction[2],1)}"
+        for transaction in transactions
+    ]
 
     return "\n".join(output)
