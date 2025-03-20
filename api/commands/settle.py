@@ -109,8 +109,8 @@ def print_help():
 
 
 def handle_message(message: str) -> str:
-    lines=message.splitlines()
-    if len(lines)==1:
+    lines = message.splitlines()
+    if len(lines) == 1:
         return print_help()
     if "help" in lines[0]:
         return print_help()

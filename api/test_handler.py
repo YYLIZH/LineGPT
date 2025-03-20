@@ -1,5 +1,3 @@
-from unittest import mock
-
 from api.commands import print_usage
 
 from . import line_handler

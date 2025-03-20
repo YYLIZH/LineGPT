@@ -1,6 +1,7 @@
 from api.commands import weather
 from api.utils.info import Error
 
+
 def test_print_help(snapshot):
     assert snapshot == weather.print_help()
 
