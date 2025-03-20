@@ -1,0 +1,73 @@
+# serializer version: 1
+# name: test_handle_message_eat
+  '請分享你的位置資訊給我'
+# ---
+# name: test_handle_message_gpt
+  '''
+  
+  * 開始對話階段
+  @LineGPT gpt start
+  
+  * 顯示過往對話紀錄
+  @LineGPT gpt log
+  
+  * 提問
+  @LineGPT gpt talk <your question> 
+  
+  Example:
+  @LineGPT gpt talk 請告訴我怎麼變有錢人
+  
+  * 關閉對話階段，過往紀錄將會被刪除
+  @LineGPT gpt close
+  
+  * 重新開始對話階段
+  @LineGPT gpt restart
+  
+  '''
+# ---
+# name: test_handle_message_settle
+  '''
+  
+  * 多人分帳
+  @LineGPT settle
+  <chart>
+  
+  Example:
+  @LineGPT settle
+  大壯: 100
+  小帥: 300
+  小美: 240
+  大黑: 0
+  
+  以下是分帳結果：
+          大黑 -> 小帥 140.0
+          大壯 -> 小美 60.0
+          大黑 -> 小美 20.0
+  
+  '''
+# ---
+# name: test_handle_message_weather
+  '''
+  
+  * 查詢未來36小時的天氣預報
+  @LineGPT weather <地點>
+  
+  Example:
+  @LineGPT weather 嘉義縣
+  
+  '''
+# ---
+# name: test_print_usage
+  '''
+  嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：
+  
+  @LineGPT <指令>
+  可用指令
+  gpt            GPT 指令
+  weather        查看天氣
+  settle         多人分帳
+  eat            現在吃什麼
+  
+  您可以使用'@LineGPT <指令> help'來查看更多資訊
+  '''
+# ---

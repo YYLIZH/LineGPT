@@ -17,7 +17,7 @@ jobs:
         run: |
           autoflake api
           isort api
-          black api
+          black api -l 70 -t py310
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:

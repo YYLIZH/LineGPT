@@ -1,50 +1,78 @@
+import textwrap
+from datetime import datetime, timedelta
+
 from api.commands import gpt
 
 
-class TestGPTSession:
+class TestDialogueSession:
     @classmethod
     def setup_class(cls):
-        cls.gpt_sessions = gpt.GPTSessions()
-        cls.gpt_sessions.sessions["test123"] = gpt.GPT()
-        cls.gpt_sessions.sessions["test123"].dialogue_session.add_human_text("hello")
-        cls.gpt_sessions.sessions["test123"].dialogue_session.add_ai_text("hi")
+        cls.session = gpt.DialogueSession()
 
-    def test_start(self):
-        res = self.gpt_sessions.start("test456")
-        assert isinstance(self.gpt_sessions.sessions.get("test456"), gpt.GPT)
+    def test_is_expired(self):
+        assert self.session.is_expired is False
+
+        self.session.last_update_time = datetime.now() - timedelta(
+            days=1
+        )
+        assert self.session.is_expired is True
 
     def test_talk(self):
-        res = self.gpt_sessions.talk("test456", "Who won the world series in 2020?")
+        response = self.session.talk(
+            "Who won the world series in 2020?"
+        )
+        assert response != ""
+
+
+class TestGPT:
+    @classmethod
+    def setup_class(cls):
+        cls.gpt = gpt.GPT()
+
+    def test_start(self):
+        res = self.gpt.start()
+        assert res == gpt.MESSAGE.GREETING.value
+
+        res = self.gpt.start()
+        assert res == gpt.MESSAGE.FOUND_SESSION.value
+
+    def test_talk(self):
+        res = self.gpt.talk("Who won the world series in 2020?")
         assert res != ""
 
-    def test_log(self):
-        res = self.gpt_sessions.log("test123")
-        log_tw = """    system: You are a helpful assistant. Please respond in 繁體中文.
-      user: hello
- assistant: hi
-"""
-        log_en = """    system: You are a helpful assistant. Please respond in en.
-      user: hello
- assistant: hi
-"""
-        assert (
-            res == gpt.MessageZHTW.LOG.value + "\n" + log_tw
-            or res == gpt.MessageEN.LOG.value + "\n" + log_en
+    def test_log(self, snapshot):
+        self.gpt.restart()
+        res = self.gpt.log()
+        log_tw = textwrap.dedent(
+            """
+            system: You are a helpful assistant. Please respond in 繁體中文.
+            user: hello
+            assistant: hi
+            """
         )
+        log_en = textwrap.dedent(
+            """
+            system: You are a helpful assistant. Please respond in en.
+            user: hello
+            assistant: hi
+            """
+        )
+        assert snapshot == gpt.MESSAGE.LOG.value + "\n" + log_tw
 
     def test_close(self):
-        res = self.gpt_sessions.close("test456")
-        assert "test456" not in list(self.gpt_sessions.sessions.keys())
+        res = self.gpt.close()
+        assert res == gpt.MESSAGE.CLOSE.value
+        assert self.gpt.dialogue_session is None
 
     def test_restart(self):
-        self.gpt_sessions.restart("test123")
+        self.gpt.restart()
 
-        assert self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
+        assert self.gpt.dialogue_session.dialogue == [
             {
                 "role": "system",
                 "content": "You are a helpful assistant. Please respond in 繁體中文.",
             }
-        ] or self.gpt_sessions.sessions["test123"].dialogue_session.dialogue == [
+        ] or self.gpt.dialogue_session.dialogue == [
             {
                 "role": "system",
                 "content": "You are a helpful assistant. Please respond in 'en'.",
@@ -52,7 +80,5 @@ class TestGPTSession:
         ]
 
 
-def test_help():
-    command = gpt.GptCommand()
-    result = command.print_usage()
-    assert result == gpt.GptCommand.usage_en or result == gpt.GptCommand.usage_zh_TW
+def test_help(snapshot):
+    assert snapshot == gpt.print_help()

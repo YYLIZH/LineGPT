@@ -1,0 +1,34 @@
+# serializer version: 1
+# name: TestGPT.test_log
+  '''
+  以下是對話紀錄：
+  
+  system: You are a helpful assistant. Please respond in 繁體中文.
+  user: hello
+  assistant: hi
+  
+  '''
+# ---
+# name: test_help
+  '''
+  
+  * 開始對話階段
+  @LineGPT gpt start
+  
+  * 顯示過往對話紀錄
+  @LineGPT gpt log
+  
+  * 提問
+  @LineGPT gpt talk <your question> 
+  
+  Example:
+  @LineGPT gpt talk 請告訴我怎麼變有錢人
+  
+  * 關閉對話階段，過往紀錄將會被刪除
+  @LineGPT gpt close
+  
+  * 重新開始對話階段
+  @LineGPT gpt restart
+  
+  '''
+# ---

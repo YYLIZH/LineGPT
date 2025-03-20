@@ -1,0 +1,12 @@
+# serializer version: 1
+# name: test_print_help
+  '''
+  
+  * 查詢未來36小時的天氣預報
+  @LineGPT weather <地點>
+  
+  Example:
+  @LineGPT weather 嘉義縣
+  
+  '''
+# ---
