@@ -2,10 +2,15 @@
 # name: test_print_help
   '''
   
-  * 尋找附近的餐廳
+  * 開啟對話來尋找附近的餐廳
   
   Example: 
-  @LineGPT eat
+  @LineGPT eat start
+  
+  * 關閉目前對話來使用其他定位功能
+  
+  Example:
+  @LineGPT eat stop
   
   '''
 # ---

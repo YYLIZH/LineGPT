@@ -1,4 +1,5 @@
 import math
+import re
 import textwrap
 from datetime import datetime, timedelta
 from enum import Enum
@@ -25,17 +26,22 @@ class GoogleMapSession:
             return True
         return False
 
+    def set_expired(self):
+        self.last_update_time = datetime.now() - timedelta(days=1)
+
 
 GOOGLE_MAP_SESSION = GoogleMapSession()
 
 
 class MessageEN(str, Enum):
-    REPLY = "Please share your location to me"
+    START_REPLY = "Please share your location to me"
+    STOP_REPLY = "Stop session. Please start again if you want to search restaurant"
     NO_RESULT = "No result in nearby location."
 
 
 class MessageZHTW(str, Enum):
-    REPLY = "請分享你的位置資訊給我"
+    START_REPLY = "請分享你的位置資訊給我"
+    STOP_REPLY = "關閉對話。如果您想繼續搜尋，請重新開始對話"
     NO_RESULT = "找不到結果"
 
 
@@ -305,19 +311,29 @@ def what_to_eat(latitude: str, longitude: str) -> dict:
 def print_help() -> str:
     usage_en = textwrap.dedent(
         """
-        * Find opening restaurant nearby.
+        * Start a new session to find opening restaurant nearby.
 
         Example:
-        @LineGPT eat
+        @LineGPT eat start
+
+        * Stop a current session to use other location function.
+
+        Example:
+        @LineGPT eat stop
         """
     )
 
     usage_zh_TW = textwrap.dedent(
         """
-        * 尋找附近的餐廳
+        * 開啟對話來尋找附近的餐廳
 
         Example: 
-        @LineGPT eat
+        @LineGPT eat start
+
+        * 關閉目前對話來使用其他定位功能
+
+        Example:
+        @LineGPT eat stop
         """
     )
     if LANGUAGE == "zh_TW":
@@ -329,5 +345,15 @@ def handle_message(message: str) -> str:
     if "help" in message:
         return print_help()
 
-    GOOGLE_MAP_SESSION.update_time()
-    return MESSAGE.REPLY.value
+    if mrx := re.search(r"^eat\s+(\w+)", message):
+        match mrx.group(1):
+            case "start":
+                GOOGLE_MAP_SESSION.update_time()
+                return MESSAGE.START_REPLY.value
+            case "stop":
+                GOOGLE_MAP_SESSION.set_expired()
+                return MESSAGE.STOP_REPLY.value
+            case _:
+                return print_help()
+
+    return print_help()
