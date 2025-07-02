@@ -1,6 +1,6 @@
 import re
 
-from linebot import LineBotApi, WebhookHandler
+from linebot import LineBotApi
 from linebot.models import (
     FlexSendMessage,
     LocationMessage,
@@ -8,8 +8,16 @@ from linebot.models import (
     TextMessage,
     TextSendMessage,
 )
+from linebot.v3 import WebhookHandler
 
-from api.commands import eat, gpt, print_usage, settle, weather,toilet
+from api.commands import (
+    eat,
+    gpt,
+    print_usage,
+    settle,
+    toilet,
+    weather,
+)
 from api.utils.configs import (
     LINE_CHANNEL_ACCESS_TOKEN,
     LINE_CHANNEL_SECRET,
@@ -61,18 +69,28 @@ def handling_location_message(event: MessageEvent):
     replyToken = event.reply_token
     location_message: LocationMessage = event.message
     if event.message:
-        if toilet.GOOGLE_MAP_SESSION.is_expired() is False and eat.GOOGLE_MAP_SESSION.is_expired() is False:
-            echoMessages = TextSendMessage(text="The sessions of both eat and toilet are existing. Please stop one of them.")
+        if (
+            toilet.GOOGLE_MAP_SESSION.is_expired() is False
+            and eat.GOOGLE_MAP_SESSION.is_expired() is False
+        ):
+            echoMessages = TextSendMessage(
+                text="The sessions of both eat and toilet are existing. Please stop one of them."
+            )
             line_bot_api.reply_message(
-                    reply_token=replyToken, messages=echoMessages
-                )
-        
-        if toilet.GOOGLE_MAP_SESSION.is_expired() is True and eat.GOOGLE_MAP_SESSION.is_expired() is True:
-            echoMessages = TextSendMessage(text="No session is running. Please type '@LineGPT eat start' or '@LineGPT toilet start' to start a location Session.")
+                reply_token=replyToken, messages=echoMessages
+            )
+
+        if (
+            toilet.GOOGLE_MAP_SESSION.is_expired() is True
+            and eat.GOOGLE_MAP_SESSION.is_expired() is True
+        ):
+            echoMessages = TextSendMessage(
+                text="No session is running. Please type '@LineGPT eat start' or '@LineGPT toilet start' to start a location Session."
+            )
             line_bot_api.reply_message(
-                    reply_token=replyToken, messages=echoMessages
-                )
-            
+                reply_token=replyToken, messages=echoMessages
+            )
+
         if eat.GOOGLE_MAP_SESSION.is_expired() is False:
             result = eat.what_to_eat(
                 latitude=location_message.latitude,

@@ -1,14 +1,16 @@
+import csv
 import math
+import multiprocessing as mp
 import re
 import textwrap
 from datetime import datetime, timedelta
 from enum import Enum
-import csv
 from functools import cache
-from api.utils.configs import LANGUAGE
-from pathlib import Path
-import multiprocessing as mp
 from multiprocessing.pool import AsyncResult
+from pathlib import Path
+
+from api.utils.configs import LANGUAGE
+
 
 class GoogleMapSession:
     timeout = 5
@@ -48,31 +50,41 @@ class MessageZHTW(str, Enum):
 
 MESSAGE = MessageZHTW if LANGUAGE == "zh_TW" else MessageEN
 
+
 @cache
-def read_toilet_data()->list[dict]:
+def read_toilet_data() -> list[dict]:
     """Read toilet data"""
-    toilet_data=[]
-    with (Path(__file__).parent/"data"/"toilet.csv").open("r",encoding="utf-8",newline='') as filep:
-        rows=csv.DictReader(filep)
+    toilet_data = []
+    with (Path(__file__).parent / "data" / "toilet.csv").open(
+        "r", encoding="utf-8", newline=""
+    ) as filep:
+        rows = csv.DictReader(filep)
 
         for row in rows:
             toilet_data.append(row)
 
     return toilet_data
 
-def get_toilets(latitude:str, longitude:str)->list[tuple[float,dict]]:
-    toilet_data=read_toilet_data()
-    task:list[AsyncResult]=[]
-    distances_out=[]
+
+def get_toilets(
+    latitude: str, longitude: str
+) -> list[tuple[float, dict]]:
+    toilet_data = read_toilet_data()
+    task: list[AsyncResult] = []
+    distances_out = []
     with mp.Pool(processes=10) as pool:
         for data in toilet_data:
-            task.append(pool.apply_async(curr2toilet,args=((latitude,longitude),data)))
+            task.append(
+                pool.apply_async(
+                    curr2toilet, args=((latitude, longitude), data)
+                )
+            )
 
         for result in task:
-                toilet,distance=result.get()
-                distances_out.append((distance,toilet))
+            toilet, distance = result.get()
+            distances_out.append((distance, toilet))
 
-    distances_out.sort(key=lambda item:item[0])
+    distances_out.sort(key=lambda item: item[0])
     return distances_out[:10]
 
 
@@ -81,12 +93,14 @@ def create_map_link(latitude: str, longitude: str) -> str:
     return map_link
 
 
-def calculate_distance(lat1:float,lon1:float,lat2:float,lon2:float) -> float:
+def calculate_distance(
+    lat1: float, lon1: float, lat2: float, lon2: float
+) -> float:
     """Use Haversine Formula
-    
+
     Returns:
         The return value unit is km.
-    
+
     """
     # 地球半徑（公里）
     R = 6371.0
@@ -115,17 +129,28 @@ def calculate_distance(lat1:float,lon1:float,lat2:float,lon2:float) -> float:
 
     return distance
 
-def curr2toilet(curr_location:tuple[float,float],toilet:dict)->tuple[dict,float]:
-    distance=calculate_distance(float(curr_location[0]),float(curr_location[1]),float(toilet["latitude"]),float(toilet["longitude"]))
-    return toilet,distance
 
-def get_place_detail(toilet_calculation:tuple[float,dict]):
-    distance,toilet_info=toilet_calculation
+def curr2toilet(
+    curr_location: tuple[float, float], toilet: dict
+) -> tuple[dict, float]:
+    distance = calculate_distance(
+        float(curr_location[0]),
+        float(curr_location[1]),
+        float(toilet["latitude"]),
+        float(toilet["longitude"]),
+    )
+    return toilet, distance
+
+
+def get_place_detail(toilet_calculation: tuple[float, dict]):
+    distance, toilet_info = toilet_calculation
     return {
         "name": toilet_info["name"],
         "address": toilet_info["address"],
         "distance": f"{int(distance)} m",
-        "map_url": create_map_link(toilet_info["latitude"], toilet_info["longitude"]),
+        "map_url": create_map_link(
+            toilet_info["latitude"], toilet_info["longitude"]
+        ),
     }
 
 

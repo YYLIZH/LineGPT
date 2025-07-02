@@ -1,0 +1,37 @@
+# serializer version: 1
+# name: test_get_toilets
+  tuple(
+    0.29190466703318296,
+    dict({
+      'address': '新竹市東\u3000區關東里光復路一段268巷41弄',
+      'administration': '新竹市公園及觀光區設施維護管理中心',
+      'city': '1001801',
+      'country': '10018',
+      'diaper': '0',
+      'exec': '新竹市公園及觀光區設施維護管理中心',
+      'grade': '特優級',
+      'latitude': '24.78351723',
+      'longitude': '121.01972687',
+      'name': '關東公園性別友善廁所',
+      'number': 'O010001838',
+      'type': '性別友善廁所',
+      'type2': '公園',
+      'village': '關東里',
+    }),
+  )
+# ---
+# name: test_print_help
+  '''
+  
+  * 開啟對話來尋找附近的廁所
+  
+  Example: 
+  @LineGPT toilet start
+  
+  * 關閉目前對話來使用其他定位功能
+  
+  Example:
+  @LineGPT toilet stop
+  
+  '''
+# ---

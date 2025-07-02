@@ -1,6 +1,18 @@
 # serializer version: 1
 # name: test_handle_message_eat
-  '請分享你的位置資訊給我'
+  '''
+  
+  * 開啟對話來尋找附近的餐廳
+  
+  Example: 
+  @LineGPT eat start
+  
+  * 關閉目前對話來使用其他定位功能
+  
+  Example:
+  @LineGPT eat stop
+  
+  '''
 # ---
 # name: test_handle_message_gpt
   '''
