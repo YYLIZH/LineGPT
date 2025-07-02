@@ -1,12 +1,10 @@
 import csv
 import math
-import multiprocessing as mp
 import re
 import textwrap
 from datetime import datetime, timedelta
 from enum import Enum
 from functools import cache
-from multiprocessing.pool import AsyncResult
 from pathlib import Path
 
 from api.utils.configs import LANGUAGE
@@ -70,19 +68,11 @@ def get_toilets(
     latitude: str, longitude: str
 ) -> list[tuple[float, dict]]:
     toilet_data = read_toilet_data()
-    task: list[AsyncResult] = []
     distances_out = []
-    with mp.Pool(processes=10) as pool:
-        for data in toilet_data:
-            task.append(
-                pool.apply_async(
-                    curr2toilet, args=((latitude, longitude), data)
-                )
-            )
 
-        for result in task:
-            toilet, distance = result.get()
-            distances_out.append((distance, toilet))
+    for data in toilet_data:
+        toilet, distance = curr2toilet((latitude, longitude), data)
+        distances_out.append((distance, toilet))
 
     distances_out.sort(key=lambda item: item[0])
     return distances_out[:10]
