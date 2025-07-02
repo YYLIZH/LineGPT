@@ -1,6 +1,6 @@
 import re
 
-from linebot import LineBotApi
+from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
     FlexSendMessage,
     LocationMessage,
@@ -8,7 +8,6 @@ from linebot.models import (
     TextMessage,
     TextSendMessage,
 )
-from linebot.v3 import WebhookHandler
 
 from api.commands import (
     eat,
