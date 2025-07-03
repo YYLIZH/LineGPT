@@ -137,7 +137,7 @@ def get_place_detail(toilet_calculation: tuple[float, dict]):
     return {
         "name": toilet_info["name"],
         "address": toilet_info["address"],
-        "distance": f"{int(distance)} m",
+        "distance": f"{int(distance*1000)} m",
         "map_url": create_map_link(
             toilet_info["latitude"], toilet_info["longitude"]
         ),
