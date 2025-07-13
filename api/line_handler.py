@@ -1,12 +1,19 @@
 import re
 
-from linebot import LineBotApi, WebhookHandler
-from linebot.models import (
-    FlexSendMessage,
-    LocationMessage,
-    MessageEvent,
+from linebot.v3 import WebhookHandler
+from linebot.v3.messaging import (
+    ApiClient,
+    Configuration,
+    FlexContainer,
+    FlexMessage,
+    MessagingApi,
+    ReplyMessageRequest,
     TextMessage,
-    TextSendMessage,
+)
+from linebot.v3.webhooks import (
+    LocationMessageContent,
+    MessageEvent,
+    TextMessageContent,
 )
 
 from api.commands import (
@@ -22,8 +29,8 @@ from api.utils.configs import (
     LINE_CHANNEL_SECRET,
 )
 
-line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
-line_handler = WebhookHandler(LINE_CHANNEL_SECRET)
+configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
+line_handler = WebhookHandler(channel_secret=LINE_CHANNEL_SECRET)
 
 
 def handle_message(message: str) -> str:
@@ -49,63 +56,87 @@ def handle_message(message: str) -> str:
             return print_usage()
 
 
-@line_handler.add(MessageEvent, message=TextMessage)
+@line_handler.add(MessageEvent, message=TextMessageContent)
 def handling_text_message(event: MessageEvent):
-    replyToken = event.reply_token
-    if event.message:
-        message: str = event.message.text
-        if message.startswith("@LineGPT"):
-            result = handle_message(message=message)
-            if result:
-                echoMessages = TextSendMessage(text=result)
-                line_bot_api.reply_message(
-                    reply_token=replyToken, messages=echoMessages
+    if not event.message:
+        return
+
+    message: str = event.message.text
+    if not message.startswith("@LineGPT"):
+        return
+
+    result = handle_message(message=message)
+    if result:
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=result)],
                 )
+            )
 
 
-@line_handler.add(MessageEvent, message=LocationMessage)
+@line_handler.add(MessageEvent, message=LocationMessageContent)
 def handling_location_message(event: MessageEvent):
     replyToken = event.reply_token
-    location_message: LocationMessage = event.message
+    location_message: LocationMessageContent = event.message
     if event.message:
+        messages = []
         if (
             toilet.GOOGLE_MAP_SESSION.is_expired() is False
             and eat.GOOGLE_MAP_SESSION.is_expired() is False
         ):
-            echoMessages = TextSendMessage(
-                text="The sessions of both eat and toilet are existing. Please stop one of them."
-            )
-            line_bot_api.reply_message(
-                reply_token=replyToken, messages=echoMessages
-            )
+            messages = [
+                TextMessage(
+                    text="The sessions of both eat and toilet are existing. "
+                    "Please stop one of them."
+                )
+            ]
 
         if (
             toilet.GOOGLE_MAP_SESSION.is_expired() is True
             and eat.GOOGLE_MAP_SESSION.is_expired() is True
         ):
-            echoMessages = TextSendMessage(
-                text="No session is running. Please type '@LineGPT eat start' or '@LineGPT toilet start' to start a location Session."
-            )
-            line_bot_api.reply_message(
-                reply_token=replyToken, messages=echoMessages
-            )
+            messages = [
+                TextMessage(
+                    text="No session is running. "
+                    "Please type '@LineGPT eat start' or '@LineGPT toilet start' to start a location Session."
+                )
+            ]
 
         if eat.GOOGLE_MAP_SESSION.is_expired() is False:
             result = eat.what_to_eat(
                 latitude=location_message.latitude,
                 longitude=location_message.longitude,
             )
-            flex_message = FlexSendMessage("restaurant cards", result)
-            line_bot_api.reply_message(
-                reply_token=replyToken, messages=flex_message
-            )
+            messages = [
+                FlexMessage(
+                    altText="restaurant cards",
+                    contents=FlexContainer.from_dict(result),
+                )
+            ]
 
         if toilet.GOOGLE_MAP_SESSION.is_expired() is False:
             result = toilet.where_to_pee(
                 latitude=location_message.latitude,
                 longitude=location_message.longitude,
             )
-            flex_message = FlexSendMessage("toilet cards", result)
-            line_bot_api.reply_message(
-                reply_token=replyToken, messages=flex_message
+            messages = [
+                FlexMessage(
+                    altText="toilet cards",
+                    contents=FlexContainer.from_dict(result),
+                )
+            ]
+
+        else:
+            # This should not happed
+            messages = [TextMessage(text="Unexpected error.")]
+
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token, messages=messages
+                )
             )
