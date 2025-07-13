@@ -1,5 +1,22 @@
 # serializer version: 1
-# name: test_handle_message_eat
+# name: test_print_usage
+  '''
+  嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：
+  
+  @LineGPT <指令>
+  可用指令
+  gpt            GPT 指令
+  weather        查看天氣
+  settle         多人分帳
+  eat            現在吃什麼
+  
+  您可以使用'@LineGPT <指令> help'來查看更多資訊
+  '''
+# ---
+# name: test_reply_location_message_multiple_existing_session
+  'The sessions of both eat and toilet are existing. Please stop one of them.'
+# ---
+# name: test_reply_text_message_eat
   '''
   
   * 開啟對話來尋找附近的餐廳
@@ -14,7 +31,7 @@
   
   '''
 # ---
-# name: test_handle_message_gpt
+# name: test_reply_text_message_gpt
   '''
   
   * 開始對話階段
@@ -37,7 +54,7 @@
   
   '''
 # ---
-# name: test_handle_message_settle
+# name: test_reply_text_message_settle
   '''
   
   * 多人分帳
@@ -58,7 +75,22 @@
   
   '''
 # ---
-# name: test_handle_message_weather
+# name: test_reply_text_message_toilet
+  '''
+  
+  * 開啟對話來尋找附近的廁所
+  
+  Example: 
+  @LineGPT toilet start
+  
+  * 關閉目前對話來使用其他定位功能
+  
+  Example:
+  @LineGPT toilet stop
+  
+  '''
+# ---
+# name: test_reply_text_message_weather
   '''
   
   * 查詢未來36小時的天氣預報
@@ -67,19 +99,5 @@
   Example:
   @LineGPT weather 嘉義縣
   
-  '''
-# ---
-# name: test_print_usage
-  '''
-  嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：
-  
-  @LineGPT <指令>
-  可用指令
-  gpt            GPT 指令
-  weather        查看天氣
-  settle         多人分帳
-  eat            現在吃什麼
-  
-  您可以使用'@LineGPT <指令> help'來查看更多資訊
   '''
 # ---

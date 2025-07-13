@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from linebot.v3.exceptions import InvalidSignatureError
 
+from api.commands import eat, toilet
 from api.line_handler import line_handler
 
 app = FastAPI()
@@ -8,7 +9,19 @@ app = FastAPI()
 
 @app.get("/")
 async def home(request: Request):
-    return {"LineGPT": "Test"}
+    eat_session = "activated"
+    if eat.GOOGLE_MAP_SESSION.is_expired():
+        eat_session = "unactivated"
+
+    toilet_session = "activated"
+    if toilet.GOOGLE_MAP_SESSION.is_expired():
+        toilet_session = "unactivated"
+
+    return {
+        "LineGPT": "Test",
+        "eat": eat_session,
+        "toilet": toilet_session,
+    }
 
 
 @app.get("/webhook")
