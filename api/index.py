@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
-from linebot.exceptions import InvalidSignatureError
+from linebot.v3.exceptions import InvalidSignatureError
 
 from api.line_handler import line_handler
 
