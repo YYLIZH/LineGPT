@@ -61,7 +61,7 @@ def read_toilet_data() -> list[dict]:
         for row in rows:
             # remove \u3000 space
             for key in row:
-                row[key]=row[key].replace("\u3000","")
+                row[key] = row[key].replace("\u3000", "")
             toilet_data.append(row)
 
     return toilet_data
