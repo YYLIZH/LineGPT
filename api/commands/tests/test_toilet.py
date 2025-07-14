@@ -4,8 +4,8 @@ from api.commands import toilet
 
 
 def test_get_toilets(snapshot):
-    latitude = "24.785057"
-    longitude = "121.017385"
+    latitude = 25.033611
+    longitude = 121.564444
     toilets = toilet.get_toilets(latitude, longitude)
     assert snapshot == toilets[0]
 
