@@ -1,4 +1,5 @@
 import csv
+import json
 import math
 import re
 import textwrap
@@ -53,7 +54,10 @@ MESSAGE = MessageZHTW if LANGUAGE == "zh_TW" else MessageEN
 def read_toilet_data() -> list[dict]:
     """Read toilet data"""
     toilet_data = []
-    with (Path(__file__).parent / "data" / "toilet.csv").open(
+    data_dir = Path(__file__).parent / "data"
+
+    # Read public toilet
+    with (data_dir / "toilet.csv").open(
         "r", encoding="utf-8", newline=""
     ) as filep:
         rows = csv.DictReader(filep)
@@ -62,7 +66,36 @@ def read_toilet_data() -> list[dict]:
             # remove \u3000 space
             for key in row:
                 row[key] = row[key].replace("\u3000", "")
-            toilet_data.append(row)
+            toilet_data.append(
+                {
+                    "name": row["name"],
+                    "address": row["address"],
+                    "latitude": row["latitude"],
+                    "longitude": row["longitude"],
+                }
+            )
+
+    # Read fami toilet
+    with (data_dir / "fami.json").open(
+        "r", encoding="utf-8"
+    ) as filep:
+        fami = json.load(filep)
+        for item in fami:
+            toilet_data.append(
+                {
+                    "name": item["NAME"],
+                    "address": item["addr"],
+                    "latitude": item["py"],
+                    "longitude": item["px"],
+                }
+            )
+
+    # Read seven toilet
+    with (data_dir / "seven.json").open(
+        "r", encoding="utf-8"
+    ) as filep:
+        seven = json.load(filep)
+        toilet_data.extend(seven)
 
     return toilet_data
 
