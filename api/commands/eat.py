@@ -2,7 +2,7 @@ import math
 import re
 import textwrap
 from enum import Enum
-import json
+
 import requests
 from linebot.v3.messaging import (
     FlexContainer,
@@ -50,7 +50,9 @@ def get_food(latitude: str, longitude: str) -> list[dict]:
         response = requests.get(url)
         data = response.json()
         return sorted(
-            data["results"], key=lambda x: x.get("rating",0), reverse=True
+            data["results"],
+            key=lambda x: x.get("rating", 0),
+            reverse=True,
         )[:10]
     except Exception:
         return []
@@ -268,7 +270,7 @@ def generate_flex_message(place_details: list[dict]) -> dict:
     return flex_message_template
 
 
-def what_to_eat(latitude: str, longitude: str) -> dict|None:
+def what_to_eat(latitude: str, longitude: str) -> dict | None:
     restaurants = get_food(latitude, longitude)
     if len(restaurants) == 0:
         return None
