@@ -277,7 +277,7 @@ def generate_button() -> dict:
         "type": "bubble",
         "hero": {
             "type": "image",
-            "url": "https://5aea1998c7da.ngrok-free.app/static/toilet.png",
+            "url": "https://line-gpt.vercel.app/static/toilet.png",
             "size": "full",
             "aspectRatio": "20:17",
             "aspectMode": "cover",
