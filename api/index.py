@@ -1,4 +1,7 @@
+import os
+
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
 from linebot.v3.exceptions import InvalidSignatureError
 
 from api.commands import eat, toilet
@@ -40,3 +43,12 @@ async def LineAgent(request: Request):
             status_code=400, detail="Missing Parameters"
         )
     return "OK"
+
+
+app.mount(
+    "/static",
+    StaticFiles(
+        directory=os.path.join(os.path.dirname(__file__), "static")
+    ),
+    name="static",
+)

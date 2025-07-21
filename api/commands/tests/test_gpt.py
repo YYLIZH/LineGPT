@@ -42,7 +42,7 @@ class TestGPT:
 
     def test_log(self, snapshot):
         self.gpt.restart()
-        res = self.gpt.log()
+        self.gpt.log()
         log_tw = textwrap.dedent(
             """
             system: You are a helpful assistant. Please respond in 繁體中文.

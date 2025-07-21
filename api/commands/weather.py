@@ -6,6 +6,7 @@ from urllib import parse
 
 import requests
 from jinja2 import Template
+from linebot.v3.messaging import TextMessage
 
 from api.utils.configs import LANGUAGE, WEATHER_TOKEN
 from api.utils.info import Error, Warning
@@ -153,12 +154,12 @@ def print_help() -> str:
     return usage_en
 
 
-def handle_message(message: str) -> str:
+def handle_message(message: str) -> list[TextMessage]:
     if "help" in message:
-        return print_help()
+        return [TextMessage(text=print_help())]
 
     if mrx := re.search(r"^weather\s+(\w+)", message):
         location = mrx.group(1)
-        return search_weather(location)
+        return [TextMessage(text=search_weather(location))]
 
-    return print_help()
+    return [TextMessage(text=print_help())]

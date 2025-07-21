@@ -4,8 +4,6 @@ from linebot.v3 import WebhookHandler
 from linebot.v3.messaging import (
     ApiClient,
     Configuration,
-    FlexContainer,
-    FlexMessage,
     Message,
     MessagingApi,
     ReplyMessageRequest,
@@ -20,6 +18,7 @@ from pydantic.v1 import StrictStr
 
 from api.commands import (
     eat,
+    googlemap,
     gpt,
     print_usage,
     settle,
@@ -37,7 +36,7 @@ line_handler = WebhookHandler(channel_secret=LINE_CHANNEL_SECRET)
 
 def reply_text_message(
     message: TextMessageContent,
-) -> list[Message] | None:
+) -> list[TextMessage] | None:
     if not message.text.startswith("@LineGPT"):
         return None
 
@@ -48,70 +47,40 @@ def reply_text_message(
     message = re.sub(r"^@LineGPT\s+", "", message.text, count=1)
     match mrx.group(1):
         case "eat":
-            return [TextMessage(text=eat.handle_message(message))]
+            return eat.handle_message(message)
         case "gpt":
-            return [TextMessage(text=gpt.handle_message(message))]
+            return gpt.handle_message(message)
         case "settle":
-            return [TextMessage(text=settle.handle_message(message))]
+            return settle.handle_message(message)
         case "weather":
-            return [TextMessage(text=weather.handle_message(message))]
+            return weather.handle_message(message)
         case "toilet":
-            return [TextMessage(text=toilet.handle_message(message))]
+            return toilet.handle_message(message)
         case "help":
-            return [TextMessage(text=print_usage())]
+            return print_usage()
         case _:
-            return [TextMessage(text=print_usage())]
+            return print_usage()
 
 
 def reply_location_message(
     location_message: LocationMessageContent,
 ) -> list[Message] | None:
-    if (
-        toilet.GOOGLE_MAP_SESSION.is_expired() is True
-        and eat.GOOGLE_MAP_SESSION.is_expired() is True
-    ):
+    if googlemap.GOOGLE_MAP_SESSION.is_expired() is True:
         return None
 
-    if (
-        toilet.GOOGLE_MAP_SESSION.is_expired() is False
-        and eat.GOOGLE_MAP_SESSION.is_expired() is False
-    ):
-        messages = [
-            TextMessage(
-                text="The sessions of both eat and toilet are existing. "
-                "Please stop one of them."
-            )
-        ]
+    match googlemap.GOOGLE_MAP_SESSION.app:
+        case "eat":
+            return eat.handle_location_message(location_message)
+        case "toilet":
+            return toilet.handle_location_message(location_message)
+        case _:
+            return [
+                TextMessage(
+                    text=f"Unknown app: {googlemap.GOOGLE_MAP_SESSION.app}"
+                )
+            ]
 
-    elif eat.GOOGLE_MAP_SESSION.is_expired() is False:
-        result = eat.what_to_eat(
-            latitude=location_message.latitude,
-            longitude=location_message.longitude,
-        )
-        messages = [
-            FlexMessage(
-                altText="restaurant cards",
-                contents=FlexContainer.from_dict(result),
-            )
-        ]
-
-    elif toilet.GOOGLE_MAP_SESSION.is_expired() is False:
-        result = toilet.where_to_pee(
-            latitude=location_message.latitude,
-            longitude=location_message.longitude,
-        )
-        messages = [
-            FlexMessage(
-                altText="toilet cards",
-                contents=FlexContainer.from_dict(result),
-            )
-        ]
-
-    else:
-        # This should not happed
-        messages = [TextMessage(text="Unexpected error.")]
-
-    return messages
+    return [TextMessage(text="Unexpected error.")]
 
 
 def send_message(

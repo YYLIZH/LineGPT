@@ -1,8 +1,14 @@
+# prod
 fastapi[all]
 line-bot-sdk
 python-dotenv
 requests
 jinja2
 g4f
-nest-asyncio
+
+# dev
+pytest
 syrupy
+autoflake
+isort
+black

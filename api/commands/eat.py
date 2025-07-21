@@ -1,47 +1,25 @@
 import math
 import re
 import textwrap
-from datetime import datetime, timedelta
 from enum import Enum
-
+import json
 import requests
+from linebot.v3.messaging import (
+    FlexContainer,
+    FlexMessage,
+    TextMessage,
+)
+from linebot.v3.webhooks import LocationMessageContent
 
+from api.commands.googlemap import GOOGLE_MAP_SESSION
 from api.utils.configs import GOOGLE_API_KEY, LANGUAGE
 
 
-class GoogleMapSession:
-    timeout = 5
-
-    def __init__(self):
-        self.last_update_time = datetime.now() - timedelta(days=1)
-
-    def update_time(self):
-        self.last_update_time = datetime.now()
-
-    def is_expired(self) -> bool:
-        expired_time = self.last_update_time + timedelta(
-            minutes=self.timeout
-        )
-        if datetime.now() > expired_time:
-            return True
-        return False
-
-    def set_expired(self):
-        self.last_update_time = datetime.now() - timedelta(days=1)
-
-
-GOOGLE_MAP_SESSION = GoogleMapSession()
-
-
 class MessageEN(str, Enum):
-    START_REPLY = "Please share your location to me"
-    STOP_REPLY = "Stop session. Please start again if you want to search restaurant"
     NO_RESULT = "No result in nearby location."
 
 
 class MessageZHTW(str, Enum):
-    START_REPLY = "請分享你的位置資訊給我"
-    STOP_REPLY = "關閉對話。如果您想繼續搜尋，請重新開始對話"
     NO_RESULT = "找不到結果"
 
 
@@ -72,7 +50,7 @@ def get_food(latitude: str, longitude: str) -> list[dict]:
         response = requests.get(url)
         data = response.json()
         return sorted(
-            data["results"], key=lambda x: x["rating"], reverse=True
+            data["results"], key=lambda x: x.get("rating",0), reverse=True
         )[:10]
     except Exception:
         return []
@@ -290,10 +268,10 @@ def generate_flex_message(place_details: list[dict]) -> dict:
     return flex_message_template
 
 
-def what_to_eat(latitude: str, longitude: str) -> dict:
+def what_to_eat(latitude: str, longitude: str) -> dict|None:
     restaurants = get_food(latitude, longitude)
     if len(restaurants) == 0:
-        return MESSAGE.NO_RESULT.value
+        return None
 
     # Format the text
     place_details = []
@@ -308,18 +286,64 @@ def what_to_eat(latitude: str, longitude: str) -> dict:
     return flex_message_dict
 
 
+def generate_button() -> dict:
+    template = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://5aea1998c7da.ngrok-free.app/static/restaurant.png",
+            "size": "full",
+            "aspectRatio": "20:17",
+            "aspectMode": "cover",
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "Click and share your location. We will find the first 10 nearest place for you.",
+                            "wrap": True,
+                        }
+                    ],
+                }
+            ],
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "Find restaurant",
+                        "uri": "https://line.me/R/nv/location/",
+                    },
+                }
+            ],
+            "flex": 0,
+        },
+    }
+    return template
+
+
 def print_help() -> str:
     usage_en = textwrap.dedent(
         """
-        * Start a new session to find opening restaurant nearby.
+        * Start find opening restaurant nearby.
 
         Example:
-        @LineGPT eat start
-
-        * Stop a current session to use other location function.
-
-        Example:
-        @LineGPT eat stop
+        @LineGPT eat
         """
     )
 
@@ -328,12 +352,7 @@ def print_help() -> str:
         * 開啟對話來尋找附近的餐廳
 
         Example: 
-        @LineGPT eat start
-
-        * 關閉目前對話來使用其他定位功能
-
-        Example:
-        @LineGPT eat stop
+        @LineGPT eat
         """
     )
     if LANGUAGE == "zh_TW":
@@ -341,19 +360,33 @@ def print_help() -> str:
     return usage_en
 
 
-def handle_message(message: str) -> str:
+def handle_message(message: str) -> list[TextMessage]:
     if "help" in message:
-        return print_help()
+        return [TextMessage(text=print_help())]
 
-    if mrx := re.search(r"^eat\s+(\w+)", message):
-        match mrx.group(1):
-            case "start":
-                GOOGLE_MAP_SESSION.update_time()
-                return MESSAGE.START_REPLY.value
-            case "stop":
-                GOOGLE_MAP_SESSION.set_expired()
-                return MESSAGE.STOP_REPLY.value
-            case _:
-                return print_help()
+    if re.search(r"^eat", message):
+        GOOGLE_MAP_SESSION.set_app("eat")
+        return [
+            FlexMessage(
+                altText="restaurant help",
+                contents=FlexContainer.from_dict(generate_button()),
+            )
+        ]
 
-    return print_help()
+    return [TextMessage(text=print_help())]
+
+
+def handle_location_message(location_message: LocationMessageContent):
+    result = what_to_eat(
+        latitude=location_message.latitude,
+        longitude=location_message.longitude,
+    )
+    if result is None:
+        return [TextMessage(text=MESSAGE.NO_RESULT.value)]
+    messages = [
+        FlexMessage(
+            altText="restaurant cards",
+            contents=FlexContainer.from_dict(result),
+        )
+    ]
+    return messages
