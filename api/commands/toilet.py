@@ -3,47 +3,26 @@ import json
 import math
 import re
 import textwrap
-from datetime import datetime, timedelta
 from enum import Enum
 from functools import cache
 from pathlib import Path
 
+from linebot.v3.messaging import (
+    FlexContainer,
+    FlexMessage,
+    TextMessage,
+)
+from linebot.v3.webhooks import LocationMessageContent
+
+from api.commands.googlemap import GOOGLE_MAP_SESSION
 from api.utils.configs import LANGUAGE
 
 
-class GoogleMapSession:
-    timeout = 5
-
-    def __init__(self):
-        self.last_update_time = datetime.now() - timedelta(days=1)
-
-    def update_time(self):
-        self.last_update_time = datetime.now()
-
-    def is_expired(self) -> bool:
-        expired_time = self.last_update_time + timedelta(
-            minutes=self.timeout
-        )
-        if datetime.now() > expired_time:
-            return True
-        return False
-
-    def set_expired(self):
-        self.last_update_time = datetime.now() - timedelta(days=1)
-
-
-GOOGLE_MAP_SESSION = GoogleMapSession()
-
-
 class MessageEN(str, Enum):
-    START_REPLY = "Please share your location to me"
-    STOP_REPLY = "Stop session. Please start again if you want to search toilet"
     NO_RESULT = "No result in nearby location."
 
 
 class MessageZHTW(str, Enum):
-    START_REPLY = "請分享你的位置資訊給我"
-    STOP_REPLY = "關閉對話。如果您想繼續搜尋，請重新開始對話"
     NO_RESULT = "找不到結果"
 
 
@@ -293,32 +272,73 @@ def where_to_pee(latitude: str, longitude: str) -> dict:
     return flex_message_dict
 
 
+def generate_button() -> dict:
+    template = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://line-gpt.vercel.app/static/toilet.png",
+            "size": "full",
+            "aspectRatio": "20:17",
+            "aspectMode": "cover",
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "Click and share your location. We will find the first 10 nearest place for you.",
+                            "wrap": True,
+                        }
+                    ],
+                }
+            ],
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "Find toilet",
+                        "uri": "https://line.me/R/nv/location/",
+                    },
+                }
+            ],
+            "flex": 0,
+        },
+    }
+    return template
+
+
 def print_help() -> str:
     usage_en = textwrap.dedent(
         """
-        * Start a new session to find toilet nearby.
+        * Find toilet nearby.
 
         Example:
-        @LineGPT toilet start
-
-        * Stop a current session to use other location function.
-
-        Example:
-        @LineGPT toilet stop
+        @LineGPT toilet
         """
     )
 
     usage_zh_TW = textwrap.dedent(
         """
-        * 開啟對話來尋找附近的廁所
+        * 尋找附近的廁所
 
         Example: 
-        @LineGPT toilet start
-
-        * 關閉目前對話來使用其他定位功能
-
-        Example:
-        @LineGPT toilet stop
+        @LineGPT toilet
         """
     )
     if LANGUAGE == "zh_TW":
@@ -326,19 +346,31 @@ def print_help() -> str:
     return usage_en
 
 
-def handle_message(message: str) -> str:
+def handle_message(message: str) -> list[TextMessage]:
     if "help" in message:
-        return print_help()
+        return [TextMessage(text=print_help())]
 
-    if mrx := re.search(r"^toilet\s+(\w+)", message):
-        match mrx.group(1):
-            case "start":
-                GOOGLE_MAP_SESSION.update_time()
-                return MESSAGE.START_REPLY.value
-            case "stop":
-                GOOGLE_MAP_SESSION.set_expired()
-                return MESSAGE.STOP_REPLY.value
-            case _:
-                return print_help()
+    if re.search(r"^toilet", message):
+        GOOGLE_MAP_SESSION.set_app("toilet")
+        return [
+            FlexMessage(
+                altText="toilet help",
+                contents=FlexContainer.from_dict(generate_button()),
+            )
+        ]
 
-    return print_help()
+    return [TextMessage(text=print_help())]
+
+
+def handle_location_message(location_message: LocationMessageContent):
+    result = where_to_pee(
+        latitude=location_message.latitude,
+        longitude=location_message.longitude,
+    )
+    messages = [
+        FlexMessage(
+            altText="toilet cards",
+            contents=FlexContainer.from_dict(result),
+        )
+    ]
+    return messages

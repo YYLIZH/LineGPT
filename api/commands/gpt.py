@@ -5,6 +5,7 @@ from enum import Enum
 
 import g4f
 from jinja2 import Template
+from linebot.v3.messaging import TextMessage
 
 from api.utils.configs import LANGUAGE, SESSION_EXPIRED
 from api.utils.info import Error, Warning
@@ -201,27 +202,33 @@ def print_help() -> str:
     return usage_en
 
 
-def handle_message(message: str) -> str:
+def handle_message(message: str) -> list[TextMessage]:
     if mrx := re.search(r"gpt\s+(\w+)\s*(.*)", message):
         match mrx.group(1):
             case "start":
-                return gpt.start()
+                return [TextMessage(text=gpt.start())]
 
             case "log":
-                return gpt.log()
+                return [TextMessage(text=gpt.log())]
 
             case "talk":
                 if mrx.group(2):
-                    return gpt.talk(mrx.group(2))
-                return "@LineGPT gpt talk <your question>"
+                    return [TextMessage(text=gpt.talk(mrx.group(2)))]
+                return [
+                    TextMessage(
+                        text="@LineGPT gpt talk <your question>"
+                    )
+                ]
 
             case "close":
-                return gpt.close()
+                return [TextMessage(text=gpt.close())]
 
             case "restart":
-                return gpt.restart()
+                return [TextMessage(text=gpt.restart())]
 
             case _:
-                return MESSAGE.NOT_ALLOW_METHOD.value
+                return [
+                    TextMessage(text=MESSAGE.NOT_ALLOW_METHOD.value)
+                ]
 
-    return print_help()
+    return [TextMessage(text=print_help())]

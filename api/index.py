@@ -1,7 +1,10 @@
+import os
+
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
 from linebot.v3.exceptions import InvalidSignatureError
 
-from api.commands import eat, toilet
+from api.commands.googlemap import GOOGLE_MAP_SESSION
 from api.line_handler import line_handler
 
 app = FastAPI()
@@ -9,18 +12,15 @@ app = FastAPI()
 
 @app.get("/")
 async def home(request: Request):
-    eat_session = "activated"
-    if eat.GOOGLE_MAP_SESSION.is_expired():
-        eat_session = "unactivated"
-
-    toilet_session = "activated"
-    if toilet.GOOGLE_MAP_SESSION.is_expired():
-        toilet_session = "unactivated"
+    session = "activated"
+    if GOOGLE_MAP_SESSION.is_expired():
+        session = "unactivated"
+    else:
+        session = GOOGLE_MAP_SESSION.app
 
     return {
         "LineGPT": "Test",
-        "eat": eat_session,
-        "toilet": toilet_session,
+        "session": session,
     }
 
 
@@ -40,3 +40,12 @@ async def LineAgent(request: Request):
             status_code=400, detail="Missing Parameters"
         )
     return "OK"
+
+
+app.mount(
+    "/static",
+    StaticFiles(
+        directory=os.path.join(os.path.dirname(__file__), "static")
+    ),
+    name="static",
+)

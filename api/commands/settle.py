@@ -2,6 +2,8 @@ import re
 import textwrap
 from enum import Enum
 
+from linebot.v3.messaging import TextMessage
+
 from api.utils.configs import LANGUAGE
 
 
@@ -108,12 +110,12 @@ def print_help():
     return usage_en
 
 
-def handle_message(message: str) -> str:
+def handle_message(message: str) -> list[TextMessage]:
     lines = message.splitlines()
     if len(lines) == 1:
-        return print_help()
+        return [TextMessage(text=print_help())]
     if "help" in lines[0]:
-        return print_help()
+        return [TextMessage(text=print_help())]
 
     chart = message.replace("：", ":")  # Replace chinese full colon
     expenses = parse_expense(chart)
@@ -124,4 +126,4 @@ def handle_message(message: str) -> str:
         for transaction in transactions
     ]
 
-    return "\n".join(output)
+    return [TextMessage(text="\n".join(output))]

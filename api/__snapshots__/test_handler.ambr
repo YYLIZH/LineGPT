@@ -13,24 +13,6 @@
   您可以使用'@LineGPT <指令> help'來查看更多資訊
   '''
 # ---
-# name: test_reply_location_message_multiple_existing_session
-  'The sessions of both eat and toilet are existing. Please stop one of them.'
-# ---
-# name: test_reply_text_message_eat
-  '''
-  
-  * 開啟對話來尋找附近的餐廳
-  
-  Example: 
-  @LineGPT eat start
-  
-  * 關閉目前對話來使用其他定位功能
-  
-  Example:
-  @LineGPT eat stop
-  
-  '''
-# ---
 # name: test_reply_text_message_gpt
   '''
   
@@ -72,21 +54,6 @@
           大黑 -> 小帥 140.0
           大壯 -> 小美 60.0
           大黑 -> 小美 20.0
-  
-  '''
-# ---
-# name: test_reply_text_message_toilet
-  '''
-  
-  * 開啟對話來尋找附近的廁所
-  
-  Example: 
-  @LineGPT toilet start
-  
-  * 關閉目前對話來使用其他定位功能
-  
-  Example:
-  @LineGPT toilet stop
   
   '''
 # ---

@@ -1,6 +1,8 @@
 from collections import namedtuple
 from typing import Dict
 
+from linebot.v3.messaging import TextMessage
+
 from api.utils.configs import LANGUAGE
 
 CommandInfo = namedtuple(
@@ -32,7 +34,7 @@ commands_info: Dict[str, CommandInfo] = {
 }
 
 
-def print_usage():
+def print_usage() -> list[TextMessage]:
     heading = (
         "嗨！我是LineGPT，很高興為您服務。以下是我的使用說明：\n\n"
         "@LineGPT <指令>\n"
@@ -53,4 +55,4 @@ def print_usage():
         line = f"{key:<15}{summary}\n"
         res += line
     res += footer
-    return res
+    return [TextMessage(text=res)]
